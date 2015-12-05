@@ -20,4 +20,11 @@ class Category extends Resource
     {
         return $this->data;
     }
+
+    public function setName($data)
+    {
+        if (array_key_exists('category', $data)) {
+            $this->name = $data['category'];
+        }
+    }
 }

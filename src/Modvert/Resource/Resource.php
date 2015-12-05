@@ -107,6 +107,8 @@ abstract class Resource implements IResource {
 	public function setData($data)
 	{
 		$this->data = $data;
+		$this->id = $data['id'];
+		$this->setName($data);
 	}
 
 	public function getData()

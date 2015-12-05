@@ -34,7 +34,7 @@ class Repository implements IRepository
         $items = $this->driver->findAll($type);
         foreach ($items as $item) {
             $resource = ResourceFactory::get($type);
-            $resource->setData($item);
+            $resource->setData((array)$item);
             $resources[] = $resource;
         }
         return $resources;

@@ -12,4 +12,8 @@ interface IResource {
 	 * @return mixed
 	 */
 	public function getCleanFields();
+
+	public function getStringInfo();
+
+	public function getInfo();
 }

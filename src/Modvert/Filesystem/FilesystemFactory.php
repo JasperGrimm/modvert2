@@ -1,6 +1,9 @@
 <?php namespace Modvert\Filesystem;
 
 use Modvert\Resource\ResourceType;
+use Modvert\Serializer\HTMLSerializer;
+use Modvert\Serializer\PHPSerializer;
+use Modvert\Serializer\SimpleSerializer;
 
 /**
  * Created by PhpStorm.
@@ -15,17 +18,14 @@ class FilesystemFactory
     {
         switch($type) {
             case ResourceType::CHUNK:
-                return new ChunkWriter();
-            case ResourceType::SNIPPET:
-                return new SnippetWriter();
-            case ResourceType::TV:
-                return new TVWriter();
             case ResourceType::CONTENT:
-                return new ContentWriter();
-            case ResourceType::CATEGORY:
-                return new CategoryWriter();
             case ResourceType::TEMPLATE:
-                return new TemplateWriter();
+                return new ResourceWriter(new HTMLSerializer());
+            case ResourceType::SNIPPET:
+                return new ResourceWriter(new PHPSerializer());
+            case ResourceType::TV:
+            case ResourceType::CATEGORY:
+                return new ResourceWriter(new SimpleSerializer());
             default:
                 throw new \InvalidArgumentException("Type %$type% is incompatible");
         }

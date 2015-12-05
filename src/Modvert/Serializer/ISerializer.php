@@ -22,5 +22,5 @@ interface ISerializer
     /**
      * @return IResource
      */
-    public function deserialize();
+    public function deserialize($file);
 }

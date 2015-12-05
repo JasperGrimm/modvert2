@@ -13,9 +13,20 @@ use Modvert\Driver\RemoteDriver;
 use Modvert\Filesystem\FilesystemFactory;
 use Modvert\Resource\Repository;
 use Modvert\Resource\ResourceType;
+use PHPixie\Database\Connection;
 
 class Storage implements IStorage
 {
+
+    /**
+     * @var Connection $connection;
+     */
+    protected $connection;
+
+    public function setDatabaseConnection(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
 
     /**
      * ????????? ??????? ???? ????? ? ??????????? ?? ?????????? ?????????? stage
@@ -38,18 +49,8 @@ class Storage implements IStorage
      */
     public function loadLocal()
     {
-        $slice = new \PHPixie\Slice();
-        $database = new \PHPixie\Database($slice->arrayData(array(
-            'default' => array(
-                'driver' => 'pdo',
-                'connection' => 'mysql:host=localhost:33060;dbname=akorsun_questoria_prod',
-                'user' => 'homestead',
-                'password' => 'secret'
-            )
-        )));
-        $connection = $database->get();
         $repository = new Repository();
-        $repository->setDriver(new DatabaseDriver($connection));
+        $repository->setDriver(new DatabaseDriver($this->connection));
         foreach (ResourceType::asArray() as $type) {
             $resources = $repository->getAll($type);
             $writer = FilesystemFactory::getWriter($type);

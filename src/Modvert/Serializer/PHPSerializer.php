@@ -8,22 +8,19 @@
 
 namespace Modvert\Serializer;
 
-use Modvert\Resource\Resource;
+use Modvert\Resource\IResource;
 
 class PHPSerializer extends Serializer
 {
 
-    public function serialize(Resource $resource)
+    public function serialize(IResource $resource)
     {
-        $path = $this->serializedModelPath . $resource->getType() . '/' . $resource->getName() . '.model';
-        if (!file_exists(dirname($path))) mkdir(dirname($path));
         $snippet = $resource->getCleanFields()['snippet'];
         $content = App::render('php.html.twig', [
             'comment_data' => $resource->getStringInfo(),
             'content' => $snippet
         ]);
-        $written = $this->writeFile($path, $content);
-        return $written;
+        return $content;
     }
 
     public function deserialize($path)
