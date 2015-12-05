@@ -4,11 +4,14 @@
  * Created by PhpStorm.
  * User: vestnik
  * Date: 12/5/2015
- * Time: 2:28 AM
+ * Time: 2:32 AM
  */
-interface IResourceReader
+class SnippetReader implements IResourceReader
 {
 
-    public function read();
+    public function read()
+    {
+
+    }
 
 }

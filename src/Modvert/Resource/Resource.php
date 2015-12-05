@@ -16,12 +16,14 @@ abstract class Resource implements IResource {
 	 * Resource constructor.
 	 * @param $data
 	 */
-	public final function __construct($data)
+	public final function __construct($data=null)
 	{
-		$this->data = $data;
-		if (!array_key_exists('id', $data)) throw new \InvalidArgumentException('Data array must contain an `id` key');
-		$this->id = $data['id'];
-		$this->setName($data);
+		if ($data) {
+			$this->data = $data;
+			if (!array_key_exists('id', $data)) throw new \InvalidArgumentException('Data array must contain an `id` key');
+			$this->id = $data['id'];
+			$this->setName($data);
+		}
 	}
 
 	public function getId() {

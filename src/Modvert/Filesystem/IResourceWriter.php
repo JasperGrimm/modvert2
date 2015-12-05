@@ -1,4 +1,5 @@
-<?php
+<?php namespace Modvert\Filesystem;
+use Modvert\Resource\IResource;
 
 /**
  * Created by PhpStorm.
@@ -8,5 +9,5 @@
  */
 interface IResourceWriter
 {
-
+    public function write(IResource $resource);
 }

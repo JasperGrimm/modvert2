@@ -8,8 +8,9 @@
 
 namespace Modvert;
 
-
+use Modvert\Driver\DatabaseDriver;
 use Modvert\Driver\RemoteDriver;
+use Modvert\Filesystem\FilesystemFactory;
 use Modvert\Resource\Repository;
 use Modvert\Resource\ResourceType;
 
@@ -26,7 +27,7 @@ class Storage implements IStorage
         $repository = new Repository();
         $repository->setDriver(new RemoteDriver($stage));
         foreach (ResourceType::asArray() as $type) {
-            $repository->getAll();
+            $resources = $repository->getAll($type);
         }
     }
 
@@ -37,7 +38,26 @@ class Storage implements IStorage
      */
     public function loadLocal()
     {
-        // TODO: Implement loadLocal() method.
+        $slice = new \PHPixie\Slice();
+        $database = new \PHPixie\Database($slice->arrayData(array(
+            'default' => array(
+                'driver' => 'pdo',
+                'connection' => 'mysql:host=localhost:33060;dbname=akorsun_questoria_prod',
+                'user' => 'homestead',
+                'password' => 'secret'
+            )
+        )));
+        $connection = $database->get();
+        $repository = new Repository();
+        $repository->setDriver(new DatabaseDriver($connection));
+        foreach (ResourceType::asArray() as $type) {
+            $resources = $repository->getAll($type);
+            $writer = FilesystemFactory::getWriter($type);
+            foreach ($resources as $resource) {
+                $writer->write($resource);
+            }
+        }
+        return [];
     }
 
     /**
