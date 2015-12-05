@@ -1,0 +1,63 @@
+{
+  "name": "vestnik/modvert2",
+  "description": "Modx vesioning tool ver2.0",
+  "require": {
+    "phpspec/php-diff": "*",
+    "kzykhys/git": "3.0",
+    "symfony/var-dumper": "^3.0",
+    "phpixie/database": "^3.1"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.1",
+    "codeception/specify": "^0.4.3",
+    "codeception/verify": "^0.3.0"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "jasper",
+      "email": "grimmsper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Modvert": "src/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "kzykhys/git",
+        "version": "3.0",
+        "source": {
+          "url": "https://github.com/Djakson/PHPGit.git",
+          "type": "git",
+          "reference": "origin/master"
+        },
+        "autoload": {
+          "psr-4": {
+            "PHPGit\\": "src/PHPGit"
+          }
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "noodlehaus/config",
+        "version": "1.0",
+        "source": {
+          "url": "https://github.com/Djakson/config.git",
+          "type": "git",
+          "reference": "origin/master"
+        },
+        "autoload": {
+          "psr-4": {
+            "Noodlehaus\\": "src"
+          }
+        }
+      }
+    }
+  ]
+}
