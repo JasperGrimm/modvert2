@@ -9,13 +9,14 @@
 namespace Modvert\Serializer;
 
 use Modvert\Resource\IResource;
+use Modvert\Templating;
 
 class HTMLSerializer extends Serializer
 {
 
     public function serialize(IResource $resource)
     {
-        $content = App::render('raw.html.twig', [
+        $content = Templating::render('raw.html.twig', [
             'comment_data' => $resource->getStringInfo(),
             'content' => $resource->getContent()
         ]);

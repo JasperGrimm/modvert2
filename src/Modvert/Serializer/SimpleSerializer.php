@@ -14,9 +14,7 @@ class SimpleSerializer extends Serializer
 {
     public function serialize(IResource $resource)
     {
-        $content = App::render('simple.html.twig', [
-            'data' => $resource->getStringInfo(),
-        ]);
+        $content = Templating::render('simple.html.twig', ['data' => $resource->getStringInfo()]);
         return $content;
     }
 

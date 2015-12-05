@@ -9,6 +9,7 @@
 namespace Modvert\Serializer;
 
 use Modvert\Resource\IResource;
+use Modvert\Templating;
 
 class PHPSerializer extends Serializer
 {
@@ -16,7 +17,7 @@ class PHPSerializer extends Serializer
     public function serialize(IResource $resource)
     {
         $snippet = $resource->getCleanFields()['snippet'];
-        $content = App::render('php.html.twig', [
+        $content = Templating::render('php.html.twig', [
             'comment_data' => $resource->getStringInfo(),
             'content' => $snippet
         ]);

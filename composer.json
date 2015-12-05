@@ -5,7 +5,8 @@
     "phpspec/php-diff": "*",
     "kzykhys/git": "3.0",
     "symfony/var-dumper": "^3.0",
-    "phpixie/database": "^3.1"
+    "phpixie/database": "^3.1",
+    "twig/twig": "^1.23"
   },
   "require-dev": {
     "codeception/codeception": "^2.1",
