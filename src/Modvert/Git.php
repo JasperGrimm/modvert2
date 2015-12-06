@@ -52,9 +52,9 @@ final class Git extends Singleton
         return $output;
     }
 
-    protected function getUnstagedChanges()
+    public function getUnstagedChanges()
     {
-        $changes = self::$repo->status()['changes'];
+        $changes = $this->repo->status()['changes'];
         if (count($changes)) {
             $changes = array_filter($changes, function ($item) {
                 return $item['index'] !== '?'; // исключаем Untracked files
@@ -63,7 +63,7 @@ final class Git extends Singleton
         return $changes;
     }
 
-    protected function hasUnstagedChanges()
+    public function hasUnstagedChanges()
     {
         return count($this->getUnstagedChanges());
     }

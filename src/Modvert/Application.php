@@ -9,6 +9,7 @@
 namespace Modvert;
 
 use Noodlehaus\Config;
+use PHPGit\Exception\GitException;
 use PHPixie\Database\Connection;
 use Modvert\Web\Server;
 
@@ -32,8 +33,14 @@ class Application extends Singleton implements IModvert
     public function sync($stage)
     {
         $this->config() && $this->stage = $stage;
+        /** @var Git $git */
         $git = Git::getInstance()->path($this->app_path);
         $storage = new Storage($this->getConnection());
+
+        if($git->hasUnstagedChanges()) {
+            throw new GitException('Please commit your changes!');
+        }
+        $git->checkoutToLastRevision();
 
         /**
          * Load from database to local files

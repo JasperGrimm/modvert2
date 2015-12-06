@@ -19,4 +19,9 @@ $resolver->setDefaults(array(
 ));
 $options = getopt('', ['stage:']);
 $options = $resolver->resolve($options);
-$app->sync($options['stage']);
+$output = new Symfony\Component\Console\Output\ConsoleOutput();
+try {
+    $app->sync($options['stage']);
+} catch (\Exception $ex) {
+    $output->writeln('<error>' . $ex->getMessage() . '</error>');
+}
