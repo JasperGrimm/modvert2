@@ -10,6 +10,7 @@ namespace Modvert;
 
 use Noodlehaus\Config;
 use PHPixie\Database\Connection;
+use Modvert\Web\Server;
 
 class Application extends Singleton implements IModvert
 {
@@ -21,6 +22,8 @@ class Application extends Singleton implements IModvert
 
     protected $stage;
 
+    protected $app_path;
+
     /**
      * @var Connection
      */
@@ -28,19 +31,27 @@ class Application extends Singleton implements IModvert
 
     public function sync($stage)
     {
-        $this->stage = $stage;
+        $this->config() && $this->stage = $stage;
         $storage = new Storage($this->getConnection());
         $storage->loadLocal();
+        $git = Git::getInstance()->path($this->app_path);
+        $git->fix();
         $storage->loadRemote($stage);
+        $git->fix();
     }
 
     public function config()
     {
-        defined('TARGET_PATH') || define('TARGET_PATH', getcwd());
+        defined('TARGET_PATH') || define('TARGET_PATH', $this->app_path ? $this->app_path : getcwd());
         if (!$this->config) {
             $this->config = \Noodlehaus\Config::load(TARGET_PATH . DIRECTORY_SEPARATOR . 'modvert.yml');
         }
         return $this->config;
+    }
+
+    public function setAppPath($app_path)
+    {
+        $this->app_path = $app_path;
     }
 
     public function stage()
@@ -69,5 +80,14 @@ class Application extends Singleton implements IModvert
             $this->connection = $database->get();
         }
         return $this->connection;
+    }
+
+    /**
+     * Handle http request
+     */
+    public function web()
+    {
+        $server = new Server();
+        $server->handle();
     }
 }

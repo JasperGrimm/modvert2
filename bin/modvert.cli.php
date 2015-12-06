@@ -10,11 +10,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+/** @var \Modvert\Application $app */
 $app = \Modvert\Application::getInstance();
 
 $resolver = new OptionsResolver();
 $resolver->setDefaults(array(
-    'stage'     => 'development'
+    'stage'     => $app->config()->get('default_stage')
 ));
 $options = getopt('', ['stage:']);
 $options = $resolver->resolve($options);

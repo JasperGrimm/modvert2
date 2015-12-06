@@ -11,6 +11,7 @@ namespace Modvert;
 use Modvert\Driver\DatabaseDriver;
 use Modvert\Driver\RemoteDriver;
 use Modvert\Filesystem\FilesystemFactory;
+use Modvert\Filesystem\ResourceWriter;
 use Modvert\Resource\Repository;
 use Modvert\Resource\ResourceType;
 use PHPixie\Database\Connection;
@@ -56,6 +57,10 @@ class Storage implements IStorage
         $repository->setDriver(new RemoteDriver($stage));
         foreach (ResourceType::asArray() as $type) {
             $resources = $repository->getAll($type);
+            $writer = FilesystemFactory::getWriter($type);
+            foreach ($resources as $resource) {
+                $writer->write($resource);
+            }
         }
     }
 

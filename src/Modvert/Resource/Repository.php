@@ -10,6 +10,7 @@ namespace Modvert\Resource;
 
 
 use Modvert\Driver\IDriver;
+use Modvert\Driver\RemoteDriver;
 
 class Repository implements IRepository
 {
@@ -34,7 +35,7 @@ class Repository implements IRepository
         $items = $this->driver->findAll($type);
         foreach ($items as $item) {
             $resource = ResourceFactory::get($type);
-            $resource->setData((array)$item);
+            $resource->setData($item);
             $resources[] = $resource;
         }
         return $resources;

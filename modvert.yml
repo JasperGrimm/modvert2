@@ -1,7 +1,7 @@
 bootstrap: ""
 database:
   host: "localhost"
-  port: 33060
+  port: 3306
   user: "questoria"
   password: "questoria"
   name: "akorsun_questoria_prod"
@@ -13,4 +13,4 @@ stages:
     test:
         remote_url: 'http://test.questoria.ru'
     development:
-        remote_url: 'http://modvert.loc/sample_project'
+        remote_url: 'http://modvert.loc'

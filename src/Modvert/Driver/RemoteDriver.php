@@ -36,9 +36,12 @@ class RemoteDriver implements IDriver
     private function get($path)
     {
         try {
-            $res = $this->client->request('GET', $this->config->get('stages.' . $this->stage)['remote_url'] . '/' . 'modvert.php?q=' . $path);
-            return json_decode($res->getBody(), true);
-        } catch (ClientException $ex) {}
+            $res = $this->client->request('GET', $this->config->get('stages.' . $this->stage)['remote_url'] . '/bin/' . 'modvert.web.php?q=' . $path);
+            return json_decode($res->getBody()->getContents(), true);
+        } catch (ClientException $ex) {
+            echo($ex->getMessage());
+            die();
+        }
         return null;
     }
 

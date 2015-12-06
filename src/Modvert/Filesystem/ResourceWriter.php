@@ -29,11 +29,22 @@ class ResourceWriter implements IResourceWriter
         $this->serializer = $serializer;
     }
 
+    private function save($path, $content) {
+        return @file_put_contents($path, $content);
+    }
+
     public function write(IResource $resource)
     {
         $content = $this->serializer->serialize($resource);
-        $path = getcwd() . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . $resource->getType();
-        if (!file_exists($path)) mkdir($path, 0777, true);
-        file_put_contents($path . DIRECTORY_SEPARATOR . $resource->getId(). '.model', $content);
+        $path = TARGET_PATH . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . $resource->getType();
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+            sleep(1);
+        }
+        if (!$this->save($path . DIRECTORY_SEPARATOR . $resource->getId(). '.model', $content)) {
+            mkdir($path, 0777, true);
+            sleep(1);
+            $this->save($path . DIRECTORY_SEPARATOR . $resource->getId(). '.model', $content);
+        }
     }
 }

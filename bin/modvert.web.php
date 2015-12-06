@@ -9,5 +9,6 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 $app = \Modvert\Application::getInstance();
+$app->setAppPath(realpath(getcwd() . DIRECTORY_SEPARATOR . '..'));
 
-$app->sync('development');
+$app->web();

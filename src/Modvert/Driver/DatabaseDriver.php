@@ -42,7 +42,7 @@ class DatabaseDriver implements IDriver {
             ->where('id', $id)
             ->limit(1)
             ->execute();
-        return $items&&count($items) ? $items[0] : null;
+        return ($items && count($items)) ? $items->current() : null;
     }
 
     /**
