@@ -13,8 +13,8 @@ class Templating
 {
     public static function render($path, $data)
     {
-        $twig = new Twig_Environment(
-            new Twig_Loader_Filesystem([__DIR__ . '/../../resources/templates']),
+        $twig = new \Twig_Environment(
+            new \Twig_Loader_Filesystem([__DIR__ . '/../../resources/templates']),
             ['auto_reload' => false, 'debug'=>false]
         );
         return $twig->render($path, $data);

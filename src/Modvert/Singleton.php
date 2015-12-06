@@ -8,10 +8,8 @@
 
 namespace Modvert;
 
-class Singleton
+abstract class Singleton
 {
-    private static $uniqueInstance = null;
-
     protected function __construct()
     {
     }
@@ -20,12 +18,14 @@ class Singleton
     {
     }
 
-    public static function getInstance()
+    final public static function getInstance()
     {
-        if (self::$uniqueInstance === null) {
-            self::$uniqueInstance = new static;
+        static $instances  = [];
+        $calledClass = get_called_class();
+        if (!isset($instances[$calledClass]))
+        {
+            $instances[$calledClass] = new $calledClass();
         }
-
-        return self::$uniqueInstance;
+        return $instances[$calledClass];
     }
 }

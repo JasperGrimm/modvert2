@@ -15,21 +15,38 @@ use Modvert\Resource\Repository;
 use Modvert\Resource\ResourceType;
 use PHPixie\Database\Connection;
 
+/**
+ * Class Storage
+ * @package Modvert
+ */
 class Storage implements IStorage
 {
-
     /**
      * @var Connection $connection;
      */
     protected $connection;
+
+    /**
+     * Storage constructor.
+     * @param Connection $connection
+     */
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
 
     public function setDatabaseConnection(Connection $connection)
     {
         $this->connection = $connection;
     }
 
+    public function getDatabaseConnection()
+    {
+        return $this->connection;
+    }
+
     /**
-     * ????????? ??????? ???? ????? ? ??????????? ?? ?????????? ?????????? stage
+     * Load resources all types from remote stage
      *
      * @return mixed
      */
@@ -43,14 +60,15 @@ class Storage implements IStorage
     }
 
     /**
-     * ????????? ??????? ???? ????? ? ??????????? ?? ????????? ??
+     * Load resources all types from local database
      *
      * @return mixed
      */
     public function loadLocal()
     {
         $repository = new Repository();
-        $repository->setDriver(new DatabaseDriver($this->connection));
+        $driver = new DatabaseDriver($this->getDatabaseConnection());
+        $repository->setDriver($driver);
         foreach (ResourceType::asArray() as $type) {
             $resources = $repository->getAll($type);
             $writer = FilesystemFactory::getWriter($type);
@@ -62,7 +80,7 @@ class Storage implements IStorage
     }
 
     /**
-     * ????????? ??????? ???? ????? ? ????????? ????????? stage
+     * Send resources all type to remote stage
      * @return mixed
      */
     public function pushToRemote($stage)

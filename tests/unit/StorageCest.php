@@ -14,13 +14,13 @@ class StorageCest
     // tests
     public function tryToCreateStorage(UnitTester $I)
     {
-        $storage = new \Modvert\Storage();
+        $storage = new \Modvert\Storage($I->getConnection());
         $I->assertTrue($storage instanceof \Modvert\Storage);
     }
 
     public function tryToLoadLocal(UnitTester $I)
     {
-        $storage = new \Modvert\Storage();
+        $storage = new \Modvert\Storage($I->getConnection());
         $storage->loadLocal();
     }
 }

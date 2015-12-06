@@ -55,4 +55,14 @@ class Content extends Resource
         }
         return $data;
     }
+
+    public function getContent()
+    {
+        return $this->data['content'];
+    }
+
+    public function setName($data)
+    {
+        $this->name = $data['alias'] . '_' . $data['id'];
+    }
 }

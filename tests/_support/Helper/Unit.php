@@ -4,6 +4,8 @@ namespace Helper;
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I
 
+use Modvert\Application;
+
 class Unit extends \Codeception\Module
 {
     /**
@@ -18,5 +20,10 @@ class Unit extends \Codeception\Module
         ];
         $r = new \Modvert\Resource\Modx\Chunk($data);
         return $r;
+    }
+
+    public function getConnection()
+    {
+        return Application::getInstance()->getConnection();
     }
 }

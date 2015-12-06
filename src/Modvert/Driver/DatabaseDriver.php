@@ -26,6 +26,7 @@ class DatabaseDriver implements IDriver {
      */
     public function __construct(Connection $connection)
     {
+        if (!$connection) throw new \InvalidArgumentException('Connection must be specified. But null passed');
         $this->connection = $connection;
     }
 

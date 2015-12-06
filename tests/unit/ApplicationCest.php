@@ -14,7 +14,7 @@ class ApplicationCest
     // tests
     public function tryToSync(UnitTester $I)
     {
-        $app = new \Modvert\Application();
+        $app = \Modvert\Application::getInstance();
         $app->sync('test');
     }
 }

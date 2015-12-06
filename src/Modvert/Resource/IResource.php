@@ -16,4 +16,6 @@ interface IResource {
 	public function getStringInfo();
 
 	public function getInfo();
+
+	public function getContent();
 }

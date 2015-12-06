@@ -20,4 +20,14 @@ class Template extends Resource
     {
         return $this->getCleanFields();
     }
+
+    public function getContent()
+    {
+        return $this->data['content'];
+    }
+
+    public function setName($data)
+    {
+        $this->name = $data['templatename'];
+    }
 }

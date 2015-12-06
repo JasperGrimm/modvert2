@@ -9,6 +9,7 @@
 namespace Modvert\Serializer;
 
 use Modvert\Resource\IResource;
+use Modvert\Templating;
 
 class SimpleSerializer extends Serializer
 {

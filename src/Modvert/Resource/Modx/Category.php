@@ -27,4 +27,9 @@ class Category extends Resource
             $this->name = $data['category'];
         }
     }
+
+    public function getContent()
+    {
+        // TODO: Implement getContent() method.
+    }
 }

@@ -23,4 +23,9 @@ class Chunk extends Resource
         $data['description'] = $this->specialEscape($data['description']);
         return $data;
     }
+
+    public function getContent()
+    {
+        return $this->data['snippet'];
+    }
 }

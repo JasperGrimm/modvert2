@@ -32,10 +32,8 @@ class ResourceWriter implements IResourceWriter
     public function write(IResource $resource)
     {
         $content = $this->serializer->serialize($resource);
-        file_put_contents(getcwd() . DIRECTORY_SEPARATOR .
-            'storage' . DIRECTORY_SEPARATOR . 'chunk' .
-            DIRECTORY_SEPARATOR . $resource->getId(). '.model',
-            $content
-        );
+        $path = getcwd() . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . $resource->getType();
+        if (!file_exists($path)) mkdir($path, 0777, true);
+        file_put_contents($path . DIRECTORY_SEPARATOR . $resource->getId(). '.model', $content);
     }
 }

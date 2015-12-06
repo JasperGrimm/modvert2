@@ -70,6 +70,8 @@ abstract class Resource implements IResource {
 
 	abstract public function getInfo();
 
+	abstract public function getContent();
+
 	private function simpleArrayToString($arr)
 	{
 		return '['  . PHP_EOL . implode(', ', $arr) . PHP_EOL . ']';

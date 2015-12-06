@@ -23,4 +23,19 @@ class TV extends Resource
         $data['elements'] = addslashes($data['elements']);
         return $data;
     }
+
+    public function getContent()
+    {
+        // TODO: Implement getContent() method.
+    }
+
+    public function getTemplates()
+    {
+        return $this->data['templates'];
+    }
+
+    public function getContentValues()
+    {
+        return $this->data['content_values'];
+    }
 }
