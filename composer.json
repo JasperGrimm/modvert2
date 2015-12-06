@@ -7,7 +7,8 @@
     "symfony/var-dumper": "^3.0",
     "phpixie/database": "^3.1",
     "twig/twig": "^1.23",
-    "noodlehaus/config": "1.0"
+    "noodlehaus/config": "1.0",
+    "guzzlehttp/guzzle": "^6.1"
   },
   "require-dev": {
     "codeception/codeception": "^2.1",
@@ -61,5 +62,6 @@
         }
       }
     }
-  ]
+  ],
+  "bin": ["bin/modvert.cli.php", "bin/modvert.web.php"]
 }
