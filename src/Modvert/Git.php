@@ -37,7 +37,6 @@ final class Git extends Singleton
     public function fix()
     {
 
-
     }
 
     public function diff($from, $to)

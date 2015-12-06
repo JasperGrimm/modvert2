@@ -34,9 +34,25 @@ class Application extends Singleton implements IModvert
         $this->config() && $this->stage = $stage;
         $git = Git::getInstance()->path($this->app_path);
         $storage = new Storage($this->getConnection());
+
+        /**
+         * Load from database to local files
+         */
         $storage->loadLocal();
+
+        /**
+         * commit in the git repository
+         */
         $git->fix();
+
+        /**
+         * Then load from remote
+         */
         $storage->loadRemote($stage);
+
+        /**
+         * And commit in the repository again
+         */
         $git->fix();
     }
 
