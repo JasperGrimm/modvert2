@@ -14,22 +14,30 @@ final class Git extends Singleton
 
     private $path;
 
+    private $repo;
+
+    private $current_branch;
+
+    private $current_revision;
+
     public function path($path)
     {
         $this->path = $path;
+        $this->repo = new \PHPGit\Git();
+        $this->repo->setRepository($this->path);
+        // Retrive the current branch
+        $br = array_filter($this->repo->branch(), function ($branch) {
+            return $branch['current'];
+        });
+        $this->current_branch = $br[array_keys($br)[0]]['name'];
+        $this->current_revision = $br[array_keys($br)[0]]['hash'];
         return $this;
     }
 
     public function fix()
     {
-        $repo = new \PHPGit\Git();
-        $repo->setRepository($this->path);
-        // Retrive the current branch
-        $br = array_filter($repo->branch(), function ($branch) {
-            return $branch['current'];
-        });
-        $current_branch = $br[array_keys($br)[0]]['name'];
-        $current_revision = $br[array_keys($br)[0]]['hash'];
+
+
     }
 
     public function diff($from, $to)

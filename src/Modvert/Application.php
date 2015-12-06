@@ -32,9 +32,9 @@ class Application extends Singleton implements IModvert
     public function sync($stage)
     {
         $this->config() && $this->stage = $stage;
+        $git = Git::getInstance()->path($this->app_path);
         $storage = new Storage($this->getConnection());
         $storage->loadLocal();
-        $git = Git::getInstance()->path($this->app_path);
         $git->fix();
         $storage->loadRemote($stage);
         $git->fix();
