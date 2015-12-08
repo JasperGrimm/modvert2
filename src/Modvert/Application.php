@@ -35,7 +35,11 @@ class Application extends Singleton implements IModvert
         $this->config() && $this->stage = $stage;
         /** @var Git $git */
         $git = Git::getInstance()->path($this->app_path);
+        /** @var History $history */
+        $history = History::getInstance()->setConnection($this->getConnection());
         $storage = new Storage($this->getConnection());
+
+        $git->setLastSyncedRevision($history->getLastSyncedRevision($git->getCurrentBranch()));
 
         if($git->hasUnstagedChanges()) {
             throw new GitException('Please commit your changes!');
@@ -65,9 +69,8 @@ class Application extends Singleton implements IModvert
 
     public function config()
     {
-        defined('TARGET_PATH') || define('TARGET_PATH', $this->app_path ? $this->app_path : getcwd());
         if (!$this->config) {
-            $this->config = \Noodlehaus\Config::load(TARGET_PATH . DIRECTORY_SEPARATOR . 'modvert.yml');
+            $this->config = \Noodlehaus\Config::load($this->app_path . DIRECTORY_SEPARATOR . 'modvert.yml');
         }
         return $this->config;
     }

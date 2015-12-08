@@ -10,13 +10,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+define('TARGET_PATH', getcwd());
+
 /** @var \Modvert\Application $app */
 $app = \Modvert\Application::getInstance();
-
+$app->setAppPath(TARGET_PATH);
 $resolver = new OptionsResolver();
-$resolver->setDefaults(array(
-    'stage'     => $app->config()->get('default_stage')
-));
+$resolver->setDefaults(['stage' => $app->config()->get('default_stage')]);
 $options = getopt('', ['stage:']);
 $options = $resolver->resolve($options);
 $output = new Symfony\Component\Console\Output\ConsoleOutput();

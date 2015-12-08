@@ -14,11 +14,26 @@ final class Git extends Singleton
 
     private $path;
 
+    /**
+     * @var \PHPGit\Git
+     */
     private $repo;
 
     private $current_branch;
 
     private $current_revision;
+
+    private $last_synced_revision;
+
+    public function getCurrentBranch()
+    {
+        return $this->current_branch;
+    }
+
+    public function getCurrentRevision()
+    {
+        return $this->current_revision;
+    }
 
     public function path($path)
     {
@@ -66,5 +81,20 @@ final class Git extends Singleton
     public function hasUnstagedChanges()
     {
         return count($this->getUnstagedChanges());
+    }
+
+    public function setLastSyncedRevision($revision)
+    {
+        $this->last_synced_revision = $revision;
+    }
+
+    public function getLastSyncedRevision()
+    {
+        return $this->last_synced_revision;
+    }
+
+    public function checkoutToLastRevision()
+    {
+        $this->repo->checkout($this->getLastSyncedRevision());
     }
 }
