@@ -52,7 +52,9 @@ class Application extends Singleton implements IModvert
         $this->config() && $this->stage = $stage;
         /** @var Git $git */
         $git = Git::getInstance()->path($this->app_path);
-        $git->dropTempRemoteBranch();
+        try {
+            $git->dropTempRemoteBranch();
+        } catch (\Exception $ex) {}
         $main_branch = $git->getCurrentBranch();
         /** @var History $history */
         $history = History::getInstance()->setConnection($this->getConnection());
