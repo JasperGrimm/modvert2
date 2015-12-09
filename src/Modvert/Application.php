@@ -56,12 +56,13 @@ class Application extends Singleton implements IModvert
             $git->dropTempRemoteBranch();
         } catch (\Exception $ex) {}
         $main_branch = $git->getCurrentBranch();
+        $last_sync_revision = $main_branch;
         /** @var History $history */
         $history = History::getInstance()->setConnection($this->getConnection());
         $storage = new Storage($this->getConnection());
-
-        $last_sync_revision = $history->getLastSyncedRevision($main_branch)->revision;
-
+        if ($rev = $history->getLastSyncedRevision($main_branch)) {
+            $last_sync_revision = $rev->revision;
+        }
         $git->setLastSyncedRevision($last_sync_revision);
 
         if($git->hasUnstagedChanges()) {
