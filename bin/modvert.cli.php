@@ -17,7 +17,7 @@ if (file_exists($path)) {
     if (file_exists($path)) {
         include_once $path;
     } else {
-        $path = str_replace('/', DIRECTORY_SEPARATOR, $root.'../../vendor/autoload.php');
+        $path = str_replace('/', DIRECTORY_SEPARATOR, $root.'../../autoload.php');
         if (file_exists($path)) {
             include_once $path;
         } else {
