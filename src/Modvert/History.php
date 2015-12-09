@@ -41,4 +41,19 @@ class History extends Singleton
         return $last_synced_revision;
     }
 
+    /**
+     * @param $revision
+     * @param $branch
+     * @return
+     */
+    public function commit($revision, $branch)
+    {
+        // Inserting
+        $insertQuery = $this->connection->insertQuery();
+        $insertQuery->data(array(
+            'revision'    => $revision,
+            'branch' => $branch
+        ))->execute();
+        return $this->connection->insertId();
+    }
 }

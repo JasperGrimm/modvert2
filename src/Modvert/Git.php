@@ -49,6 +49,12 @@ final class Git extends Singleton
         return $this;
     }
 
+    public function refresh()
+    {
+        if (!$this->path) throw new \Exception('Git never be initialized!');
+        return $this->path($this->path);
+    }
+
     public function fix()
     {
 
