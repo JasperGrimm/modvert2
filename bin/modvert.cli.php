@@ -9,14 +9,18 @@
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 $root = __DIR__.'/../';
-if (file_exists($root.'/vendor/autoload.php')) {
-    include_once $root.'/vendor/autoload.php';
-} elseif (file_exists($root.'/../../autoload.php')) {
-    include_once $root.'/../../autoload.php';
-} else {
-    echo 'Something goes wrong with your archive'.PHP_EOL.
-        'Try downloading again'.PHP_EOL;
-    exit(1);
+$path = str_replace('/', DIRECTORY_SEPARATOR, $root.'/vendor/autoload.php');
+if (file_exists($path)) {
+    include_once $path;
+} else{
+    $path = str_replace('/', DIRECTORY_SEPARATOR, $root.'/../../autoload.php');
+    if (file_exists($path)) {
+        include_once $path;
+    } else {
+        echo 'Something goes wrong with your archive'.PHP_EOL.
+            'Try downloading again'.PHP_EOL;
+        exit(1);
+    }
 }
 
 define('TARGET_PATH', getcwd());
