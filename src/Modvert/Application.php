@@ -89,6 +89,7 @@ class Application extends Singleton implements IModvert
             }
         } catch(\Exception $ex) {
             $git->checkout($main_branch);
+            throw $ex;
         }
         $git->dropTempRemoteBranch();
         if (self::$need_for_push) {
