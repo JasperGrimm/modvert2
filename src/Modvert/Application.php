@@ -70,20 +70,25 @@ class Application extends Singleton implements IModvert
         self::$need_for_push = !empty($git->diff($main_branch, $last_sync_revision));
 
         $git->checkoutToTempRemoteBranch();
-        /**
-         * Then load from remote
-         */
-        $storage->loadRemote($stage);
+        try {
+            /**
+             * Then load from remote
+             */
+            $storage->loadRemote($stage);
+            if($git->hasUnstagedChanges()) {
+                $git->fix();
+                self::$need_merge = true;
+            }
+            $git->checkout($main_branch);
+            if (self::$need_merge) {
+                $git->mergeTempRemoteBranch();
+            }
+        } catch(\Exception $ex) {
+            $git->checkout($main_branch);
+        } finally {
+            $git->dropTempRemoteBranch();
+        }
 
-        if($git->hasUnstagedChanges()) {
-            $git->fix();
-            self::$need_merge = true;
-        }
-        $git->checkout($main_branch);
-        if (self::$need_merge) {
-            $git->mergeTempRemoteBranch();
-        }
-        $git->dropTempRemoteBranch();
         if (self::$need_for_push) {
             die('Remote sync');
         }
