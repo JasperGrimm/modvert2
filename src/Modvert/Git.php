@@ -95,6 +95,26 @@ final class Git extends Singleton
 
     public function checkoutToLastRevision()
     {
-        $this->repo->checkout($this->getLastSyncedRevision());
+        $this->checkout($this->getLastSyncedRevision());
+    }
+
+    public function checkout($revision)
+    {
+        $this->repo->checkout($revision);
+    }
+
+    public function checkoutToTempRemoteBranch()
+    {
+        return $this->repo->checkout->create('modvert/RB', $this->last_synced_revision);
+    }
+
+    public function dropTempRemoteBranch()
+    {
+        return $this->repo->branch->delete('modvert/RB', ['force'=>1]);
+    }
+
+    public function mergeTempRemoteBranch()
+    {
+        return $this->repo->merge('modvert/RB');
     }
 }

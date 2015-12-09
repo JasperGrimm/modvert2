@@ -16,6 +16,9 @@ use Modvert\Web\Server;
 class Application extends Singleton implements IModvert
 {
 
+    protected static $need_for_push = false;
+    protected static $need_merge = false;
+
     /**
      * @var Config
      */
@@ -30,41 +33,60 @@ class Application extends Singleton implements IModvert
      */
     protected $connection;
 
+    /**
+     * 1. I'm on a HEAD of branch
+     * 2. Check has unstaged?
+     * 2.yes. Print error message
+     * 3. Checkout to the last synced revision
+     * 4. Check has changed files in the storage. Diff to the HEAD ?
+     * 4.yes. Mark "Need For Push"
+     * 5. Checkout to the HEAD of the branch
+     * 6. Load resources data from the remote stage to the local storage
+     * 7. Check has changed files in the storage ?
+     * 7.yes. Commit changes and
+     * @param $stage
+     * @throws GitException
+     */
     public function sync($stage)
     {
         $this->config() && $this->stage = $stage;
         /** @var Git $git */
         $git = Git::getInstance()->path($this->app_path);
+        $main_branch = $git->getCurrentBranch();
         /** @var History $history */
         $history = History::getInstance()->setConnection($this->getConnection());
         $storage = new Storage($this->getConnection());
 
-        $git->setLastSyncedRevision($history->getLastSyncedRevision($git->getCurrentBranch()));
+        $last_sync_revision = $history->getLastSyncedRevision($main_branch);
+
+        $git->setLastSyncedRevision($last_sync_revision);
 
         if($git->hasUnstagedChanges()) {
-            throw new GitException('Please commit your changes!');
+            throw new GitException('Please commit your changes and try again!');
         }
+
         $git->checkoutToLastRevision();
 
-        /**
-         * Load from database to local files
-         */
-        $storage->loadLocal();
+        self::$need_for_push = !empty($git->diff($main_branch, $last_sync_revision));
 
-        /**
-         * commit in the git repository
-         */
-        $git->fix();
-
+        $git->checkoutToTempRemoteBranch();
         /**
          * Then load from remote
          */
         $storage->loadRemote($stage);
 
-        /**
-         * And commit in the repository again
-         */
-        $git->fix();
+        if($git->hasUnstagedChanges()) {
+            $git->fix();
+            self::$need_merge = true;
+        }
+        $git->checkout($main_branch);
+        if (self::$need_merge) {
+            $git->mergeTempRemoteBranch();
+        }
+        $git->dropTempRemoteBranch();
+        if (self::$need_for_push) {
+            die('Remote sync');
+        }
     }
 
     public function config()
