@@ -87,7 +87,6 @@ class Application extends Singleton implements IModvert
                 $git->mergeTempRemoteBranch();
             }
         } catch(\Exception $ex) {
-            dump($ex);
             $git->checkout($main_branch);
         }
         $git->dropTempRemoteBranch();
