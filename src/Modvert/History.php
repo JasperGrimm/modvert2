@@ -32,6 +32,7 @@ class History extends Singleton
     {
         $query = $this->connection->selectQuery()
             ->table('modvert_history')
+            ->fields(['revision'])
             ->where('branch', $branch)
             ->orderDescendingBy('created')
             ->limit(1)

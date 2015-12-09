@@ -57,7 +57,7 @@ class Application extends Singleton implements IModvert
         $history = History::getInstance()->setConnection($this->getConnection());
         $storage = new Storage($this->getConnection());
 
-        $last_sync_revision = $history->getLastSyncedRevision($main_branch);
+        $last_sync_revision = $history->getLastSyncedRevision($main_branch)->revision;
 
         $git->setLastSyncedRevision($last_sync_revision);
 
