@@ -20,9 +20,9 @@ $resolver->setDefaults(['stage' => $app->config()->get('default_stage')]);
 $options = getopt('', ['stage:']);
 $options = $resolver->resolve($options);
 $output = new Symfony\Component\Console\Output\ConsoleOutput();
-try {
+//try {
     $app->sync($options['stage']);
     $output->writeln('<info>Complete!</info>');
-} catch (\Exception $ex) {
-    $output->writeln('<error>' . $ex->getMessage() . '</error>');
-}
+//} catch (\Exception $ex) {
+//    $output->writeln('<error>' . $ex->getMessage() . '</error>');
+//}
