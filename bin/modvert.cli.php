@@ -15,6 +15,7 @@ if (file_exists($path)) {
 } else{
     $path = str_replace('/', DIRECTORY_SEPARATOR, $root.'/../../autoload.php');
     if (file_exists($path)) {
+        dump($path);die();
         include_once $path;
     } else {
         echo 'Something goes wrong with your archive'.PHP_EOL.
