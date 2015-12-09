@@ -50,10 +50,12 @@ class History extends Singleton
     {
         // Inserting
         $insertQuery = $this->connection->insertQuery();
-        $insertQuery->data(array(
-            'revision'    => $revision,
-            'branch' => $branch
-        ))->execute();
+        $insertQuery
+            ->table('modvert_history')
+            ->data([
+                'revision' => $revision,
+                'branch' => $branch
+            ])->execute();
         return $this->connection->insertId();
     }
 }
