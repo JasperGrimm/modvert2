@@ -57,6 +57,7 @@ final class Git extends Singleton
 
     public function fix()
     {
+        $this->repo->add(TARGET_PATH . DIRECTORY_SEPARATOR . 'storage');
         $this->repo->commit('modvert fix');
     }
 
@@ -73,6 +74,20 @@ final class Git extends Singleton
         return $output;
     }
 
+    /**
+     * Check diff in the storage folder
+     */
+    public function getInStorageDiff()
+    {
+        $changes = $this->repo->status()['changes'];
+        if (count($changes)) {
+            $changes = array_filter($changes, function ($item) {
+                return preg_match('/^storage\/.+/', $item['file']);
+            });
+        }
+        return $changes;
+    }
+    
     public function getUnstagedChanges()
     {
         $changes = $this->repo->status()['changes'];
