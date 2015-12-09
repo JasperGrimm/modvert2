@@ -57,7 +57,7 @@ final class Git extends Singleton
 
     public function fix()
     {
-
+        $this->repo->commit('modvert fix');
     }
 
     public function diff($from, $to)
