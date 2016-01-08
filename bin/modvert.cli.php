@@ -38,6 +38,7 @@ $resolver->setDefaults(['stage' => $app->config()->get('default_stage')]);
 $options = getopt('', ['stage:']);
 $options = $resolver->resolve($options);
 $output = new Symfony\Component\Console\Output\ConsoleOutput();
+$app->setOutput($output);
 try {
     if (count($argv) >= 2 && $argv[1] == 'init') {
         $app->init();

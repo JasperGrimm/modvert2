@@ -28,102 +28,30 @@ class Application extends Singleton implements IModvert
 
     protected $app_path;
 
+    protected $output;
+
     /**
      * @var Connection
      */
     protected $connection;
 
-    /**
-     * @return History
-     */
-    public function createHistory()
+    public function setOutput($output)
     {
-        return History::getInstance()->setConnection($this->getConnection());
-    }
-
-    /**
-     * @return Git
-     */
-    public function createRepo()
-    {
-        /** @var Git $git */
-        return Git::getInstance()->path($this->app_path);
-    }
-
-    /**
-     * 1. I'm on a HEAD of branch
-     * 2. Check has unstaged?
-     * 2.yes. Print error message
-     * 3. Checkout to the last synced revision
-     * 4. Check has changed files in the storage. Diff to the HEAD ?
-     * 4.yes. Mark "Need For Push"
-     * 5. Checkout to the HEAD of the branch
-     * 6. Load resources data from the remote stage to the local storage
-     * 7. Check has changed files in the storage ?
-     * 7.yes. Commit changes and
-     * @param $stage
-     * @throws GitException
-     */
-    public function sync($stage)
-    {
-        $this->config() && $this->stage = $stage;
-        /** @var Git $git */
-        $git = $this->createRepo();
-        try {
-            $git->dropTempRemoteBranch();
-        } catch (\Exception $ex) {}
-        $main_branch = $git->getCurrentBranch();
-        /** @var History $history */
-        $history = $this->createHistory();
-        $storage = new Storage($this->getConnection());
-        if ($rev = $history->getLastSyncedRevision($main_branch)) {
-            $last_sync_revision = $rev->revision;
-        } else {
-            throw new \Exception('Please run command `bin/modvert.cli.php init` before!');
-        }
-        $git->setLastSyncedRevision($last_sync_revision);
-
-        if($git->hasUnstagedChanges()) {
-            throw new GitException('Please commit your changes and try again!');
-        }
-
-        $git->checkoutToLastRevision();
-
-        self::$need_for_push = !empty($git->diff($main_branch, $last_sync_revision));
-
-        $git->checkoutToTempRemoteBranch();
-        try {
-            /**
-             * Then load from remote
-             */
-            $storage->loadRemote($stage);
-            if($git->hasUnstagedChanges()) {
-                $git->fix();
-                self::$need_merge = true;
-            }
-            $git->checkout($main_branch);
-            if (self::$need_merge) {
-                $git->mergeTempRemoteBranch();
-            }
-        } catch(\Exception $ex) {
-            $git->checkout($main_branch);
-            throw $ex;
-        }
-        $git->dropTempRemoteBranch();
-
-        if (self::$need_for_push) {
-            $git->refresh();
-            $history->commit($git->getCurrentRevision(), $main_branch);
-            die('Remote sync');
-        }
+      $this->output = $output;
     }
 
     public function init()
     {
-        /** @var History $history */
-        $history = $this->createHistory();
-        $git = $this->createRepo();
-        $history->commit($git->getCurrentRevision(), $git->getCurrentBranch());
+
+    }
+
+    public function sync($stage)
+    {
+        $this->output->writeln(sprintf('<info>[stage=%s]</info>', $stage));
+        $this->config() && $this->stage = $stage;
+        $storage = new Storage($this->getConnection());
+        //$storage->loadRemote($stage);
+        $storage->loadLocal();
     }
 
     public function config()

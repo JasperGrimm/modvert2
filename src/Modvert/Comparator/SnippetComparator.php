@@ -9,20 +9,13 @@
 use Modvert\Resource\IResource;
 use Modvert\Resource\Modx\Snippet;
 
-class SnippetComparator extends \Modvert\Singleton implements IComparator
+class SnippetComparator extends BaseComparator
 {
 
     public function compare(IResource $resourceA, IResource $resourceB)
     {
         if ($resourceA instanceof Snippet && $resourceB instanceof Snippet) {
-            $data_a = $resourceA->getCleanFields();
-            $data_b = $resourceB->getCleanedFields();
-            $a = explode("\n", $data_a['snippet']);
-            $b = explode("\n", $data_b['snippet']);
-            $d = new Diff($a, $b, []);
-            $renderer = new \Diff_Renderer_Html_SideBySide;
-            $diffc = $d->render($renderer);
-            return !empty($diffc);
+            return parent::compare($resourceA, $resourceB);
         }
         throw new \InvalidArgumentException('$resourceA and $resourceB must be an instance of Snippet');
     }

@@ -24,7 +24,7 @@ class Category extends Resource
     public function setName($data)
     {
         if (array_key_exists('category', $data)) {
-            $this->name = $data['category'];
+            $this->name = urldecode($data['category']);
         }
     }
 
