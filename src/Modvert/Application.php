@@ -45,7 +45,7 @@ class Application extends Singleton implements IModvert
 
     }
 
-    public function sync($stage)
+    public function dump($stage)
     {
         $this->output->writeln(sprintf('<info>[stage=%s]</info>', $stage));
         $this->config() && $this->stage = $stage;

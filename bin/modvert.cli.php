@@ -42,9 +42,16 @@ $app->setOutput($output);
 try {
     if (count($argv) >= 2 && $argv[1] == 'init') {
         $app->init();
-    } else {
-        $app->sync($options['stage']);
+    } elseif (count($argv) >= 2 && $argv[1] == 'dump') {
+        $app->dump($options['stage']);
         $output->writeln('<info>Complete!</info>');
+    } elseif (count($argv) >= 2 && $argv[1] == 'build') {
+        $app->build($options['stage']);
+        $output->writeln('<info>Complete!</info>');
+    } else {
+        $output->writeln('<info>Usage:</info>');
+        $output->writeln('<info>bin/modvert.cli.php dump - load from database into files</info>');
+        $output->writeln('<info>bin/modvert.cli.php build - load from files to database [@Warning: all inmanager modifications will be lost!]</info>');
     }
 } catch (\Exception $ex) {
     $output->writeln('<error>' . $ex->getMessage() . '</error>');
