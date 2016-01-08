@@ -36,6 +36,7 @@ class PHPSerializer extends Serializer
                 $content = preg_replace('/\\r\\n/s', "\n", $content);
                 $content = preg_replace('/\<\?php(\\n\\n)(.*)/sm', '${2}', $content);
                 $content = preg_replace('/(.*)\?\>/sm', '${1}', $content);
+                $content = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*$/", "\n", $content); // remove empty lines from the end
                 break;
             }
         }
