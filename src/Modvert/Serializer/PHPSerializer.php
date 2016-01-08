@@ -43,7 +43,6 @@ class PHPSerializer extends Serializer
         }
         $content = preg_replace("/^([\r\n]*?)$/sm", "", $content);
         $content = <<<CONTENT
-
 $content
 CONTENT;
         $docblock = preg_replace('/\/\*\*(.*)\*\//s', '${1}', $docblock);
