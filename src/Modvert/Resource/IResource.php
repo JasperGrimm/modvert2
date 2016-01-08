@@ -18,4 +18,8 @@ interface IResource {
 	public function getInfo();
 
 	public function getContent();
+
+	public function setData($data);
+
+	public function getData();
 }

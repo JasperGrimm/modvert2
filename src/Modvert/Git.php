@@ -87,7 +87,7 @@ final class Git extends Singleton
         }
         return $changes;
     }
-    
+
     public function getUnstagedChanges()
     {
         $changes = $this->repo->status()['changes'];
