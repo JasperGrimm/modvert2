@@ -41,6 +41,7 @@ class PHPSerializer extends Serializer
                 break;
             }
         }
+        $content = preg_replace("/^([\r\n]*?)$/sm", "", $content);
         $docblock = preg_replace('/\/\*\*(.*)\*\//s', '${1}', $docblock);
         $data = eval($docblock);
         $data['content'] = $content;
