@@ -34,8 +34,7 @@ class PHPSerializer extends Serializer
             if (T_DOC_COMMENT == $token[0]) {
                 $docblock = $token[1];
                 $content = str_replace($docblock, '', $source);
-                // $content = preg_replace('/\\r\\n/s', "\n", $content);
-                $content = preg_replace('/\<\?php(.*)/sm', '${1}', $content);
+                $content = preg_replace('/\<\?php[\r\n]?(.*)/sm', '${1}', $content);
                 $content = preg_replace('/(.*)\?\>/sm', '${1}', $content);
                 $content = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*$/", "\n", $content); // remove empty lines from the end
                 break;
