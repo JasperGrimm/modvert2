@@ -17,6 +17,7 @@ class PHPSerializer extends Serializer
     public function serialize(IResource $resource)
     {
         $snippet = $resource->getCleanFields()['snippet'];
+        $snippet = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*$/", "\n", $snippet); // remove empty lines from the end
         $content = Templating::render('php.html.twig', [
             'comment_data' => $resource->getStringInfo(),
             'content' => $snippet
