@@ -31,4 +31,20 @@ class FilesystemFactory
         }
     }
 
+    public static function getReader($type)
+    {
+        switch($type) {
+            case ResourceType::CHUNK:
+            case ResourceType::CONTENT:
+            case ResourceType::TEMPLATE:
+                return new ResourceReader(new HTMLSerializer(), $type);
+            case ResourceType::SNIPPET:
+                return new ResourceReader(new PHPSerializer(), $type);
+            case ResourceType::TV:
+            case ResourceType::CATEGORY:
+                return new ResourceReader(new SimpleSerializer(), $type);
+            default:
+                throw new \InvalidArgumentException("Type %$type% is incompatible");
+        }
+    }
 }

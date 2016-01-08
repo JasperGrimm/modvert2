@@ -117,4 +117,9 @@ abstract class Resource implements IResource {
 	{
 		return $this->data;
 	}
+
+	public function getRawData()
+	{
+		return $this->getData();
+	}
 }

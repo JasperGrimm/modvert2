@@ -28,4 +28,12 @@ class Snippet extends Resource
     {
         return $this->data['snippet'];
     }
+    
+    public function getRawData()
+  	{
+  		$data = $this->data;
+  		$data['snippet'] = $data['content'];
+  		unset($data['content']);
+      return $data;
+  	}
 }

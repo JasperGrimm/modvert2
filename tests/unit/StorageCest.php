@@ -22,4 +22,10 @@ class StorageCest
         $storage = new \Modvert\Storage($I->getConnection());
         $storage->loadLocal();
     }
+
+    public function tryToBuildFromFiles(UnitTester $I)
+    {
+        $storage = new \Modvert\Storage($I->getConnection());
+        $storage->buildFromFiles();
+    }
 }

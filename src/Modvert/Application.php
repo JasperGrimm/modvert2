@@ -42,7 +42,7 @@ class Application extends Singleton implements IModvert
 
     public function init()
     {
-
+      if (!$this->app_path) $this->setAppPath(getcwd());
     }
 
     public function dump($stage)
@@ -52,6 +52,14 @@ class Application extends Singleton implements IModvert
         $storage = new Storage($this->getConnection());
         //$storage->loadRemote($stage);
         $storage->loadLocal();
+    }
+
+    public function build($stage)
+    {
+        $this->output->writeln(sprintf('<info>[stage=%s]</info>', $stage));
+        $this->config() && $this->stage = $stage;
+        $storage = new Storage($this->getConnection());
+        $storage->buildFromFiles();
     }
 
     public function config()
@@ -65,6 +73,11 @@ class Application extends Singleton implements IModvert
     public function setAppPath($app_path)
     {
         $this->app_path = $app_path;
+    }
+
+    public function getAppPath()
+    {
+      return $this->app_path;
     }
 
     public function stage()

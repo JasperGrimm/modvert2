@@ -59,7 +59,14 @@ class DatabaseDriver implements IDriver {
 
     public function insert(IResource $resource)
     {
-        // TODO: Implement insert() method.
+        try {
+          $this->connection->insertQuery()
+           ->table($this->table_map[$resource->getType()])
+           ->data($resource->getRawData())
+           ->execute();
+        } catch (\Exception $ex) {
+          die(dump($resource));
+        }
     }
 
     public function update(IResource $resource)
@@ -74,6 +81,13 @@ class DatabaseDriver implements IDriver {
     public function remove($type, $id)
     {
         // TODO: Implement remove() method.
+    }
+
+    public function truncate($type)
+    {
+        $this->connection->deleteQuery()
+          ->table($this->table_map[$type])
+          ->execute();
     }
 
     /**
