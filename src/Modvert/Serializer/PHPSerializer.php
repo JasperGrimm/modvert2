@@ -18,7 +18,7 @@ class PHPSerializer extends Serializer
   {
       $snippet = $resource->getCleanFields()['snippet'];
       $snippet = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*$/", "\n", $snippet); // remove empty lines from the end
-      $snippet = preg_replace("/\r\n/", "\n", $snippet); // remove empty lines from the end
+      //$snippet = preg_replace("/\r\n/", "\n", $snippet); // remove empty lines from the end
       $snippet = preg_replace('/^\s+$/s', "\n", $snippet);
       $content = Templating::render('php.html.twig', [
           'comment_data' => $resource->getStringInfo(),
