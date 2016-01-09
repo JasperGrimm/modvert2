@@ -38,7 +38,7 @@ class PHPSerializer extends Serializer
               $content = str_replace($docblock, '', $source);
               $content = preg_replace("/\r\n/", "\n", $content);
               $content = preg_replace('/\<\?php[\r\n]?(.*)/sm', '${1}', $content);
-              $content = preg_replace('/(.*)\?\>/sm', '${1}', $content);
+              // $content = preg_replace('/(.*)\?\>/sm', '${1}', $content);
               // $content = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*$/", "\n", $content); // remove empty lines from the end
               $content = preg_replace('/^\s+$/s', "\n", $content);
               $content = preg_replace('/^\n$/m', '', $content, 1);
