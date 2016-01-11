@@ -69,6 +69,10 @@ class RemoteDriver implements IDriver
         // TODO: Implement remove() method.
     }
 
+    public function truncate($type)
+    {
+        // TODO: Implement truncate() method.
+    }
     /**
      * Return TRUE, if passed resource is different with this resource stored in current store
      *
