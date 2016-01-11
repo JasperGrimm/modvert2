@@ -92,8 +92,10 @@ class Application extends Singleton implements IModvert
 
         $temp_branch = 'modvert/develop';
         $parent_branch = 'origin/develop';
+        try {
+            $git->branch->delete($temp_branch);
+        } catch(\Exception $ex) { /** the branch not found */ }
 
-        $git->branch->delete($temp_branch);
         $git->checkout->create($temp_branch, $parent_branch);
         // $storage_changes = ArrayHelper::matchValue($git->status()['changes'], 'file', '/^storage/');
         // if (count($changes)) {
