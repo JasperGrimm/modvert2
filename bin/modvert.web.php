@@ -25,7 +25,7 @@ if (file_exists($path)) {
        }
    }
 }
-define('TARGET_PATH', realpath(getcwd() . DIRECTORY_SEPARATOR . '..'));
+define('TARGET_PATH', $_SERVER['DOCUMENT_ROOT']);
 
 /** @var \Modvert\Application $app */
 $app = \Modvert\Application::getInstance();

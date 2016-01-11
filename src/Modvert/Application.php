@@ -10,8 +10,11 @@ namespace Modvert;
 
 use Noodlehaus\Config;
 use PHPGit\Exception\GitException;
+use PHPGit\Git;
 use PHPixie\Database\Connection;
 use Modvert\Web\Server;
+use Modvert\Application;
+use \Modvert\Helper\ArrayHelper;
 
 class Application extends Singleton implements IModvert
 {
@@ -54,12 +57,48 @@ class Application extends Singleton implements IModvert
         $storage->loadLocal();
     }
 
+    /**
+     * [build description]
+     * @param  [type] $stage [description]
+     * @return [type]        [description]
+     */
     public function build($stage)
     {
         $this->output->writeln(sprintf('<info>[stage=%s]</info>', $stage));
         $this->config() && $this->stage = $stage;
         $storage = new Storage($this->getConnection());
         $storage->buildFromFiles();
+    }
+
+    /**
+     * 1. Checkout to new branch modvert/test based on origin/test
+     * or movert/develop based on origin/develop
+     * 2. Load remote resources
+     * 3. Show message:
+     *   1. Check changes `git diff --name-only -- storage`
+     *   2. Commit if has changes
+     *   3. Checkout to the main branch (test/develop/feature/QUES-*)
+     *   4. Merge `git merge movert/test` or `git merge movert/develop`
+     */
+    public function loadRemote($stage)
+    {
+        $storage = new Storage($this->getConnection());
+        $git = new Git();
+        $git->setRepository(Application::getInstance()->getAppPath());
+        // do not checkout if has unstaged changes
+        if (count($git->status()['changes'])) {
+          return $this->output->writeln('<error>Please commit changes before!</error>');
+        }
+
+        $temp_branch = 'modvert/develop';
+        $parent_branch = 'origin/develop';
+
+        $git->branch->delete($temp_branch);
+        $git->checkout->create($temp_branch, $parent_branch);
+        // $storage_changes = ArrayHelper::matchValue($git->status()['changes'], 'file', '/^storage/');
+        // if (count($changes)) {
+        //
+        // }
     }
 
     public function config()

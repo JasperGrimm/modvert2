@@ -16,4 +16,10 @@ class ApplicationCest
         $app = \Modvert\Application::getInstance();
         $app->sync('test');
     }
+
+    public function tryToLoadRemote(UnitTester $I)
+    {
+      $app = \Modvert\Application::getInstance();
+      $app->loadRemote(); 
+    }
 }

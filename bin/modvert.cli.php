@@ -48,10 +48,13 @@ try {
     } elseif (count($argv) >= 2 && $argv[1] == 'build') {
         $app->build($options['stage']);
         $output->writeln('<info>Complete!</info>');
+    } elseif (count($argv) >= 2 && $argv[1] == 'load-remote') {
+        $app->loadRemote($options['stage']);
     } else {
         $output->writeln('<info>Usage:</info>');
         $output->writeln('<info>bin/modvert.cli.php dump - load from database into files</info>');
         $output->writeln('<info>bin/modvert.cli.php build - load from files to database [@Warning: all inmanager modifications will be lost!]</info>');
+        $output->writeln('<info>bin/modvert.cli.php load-remote - load from remote stage into files [@Warning: all inmanager modifications will be lost!]</info>');
     }
 } catch (\Exception $ex) {
     $output->writeln('<error>' . $ex->getMessage() . '</error>');
