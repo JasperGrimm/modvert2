@@ -100,7 +100,7 @@ class Application extends Singleton implements IModvert
         $temp_branch = 'modvert/develop';
         $parent_branch = 'origin/develop';
         try {
-            $git->branch->delete($temp_branch);
+            $git->branch->delete($temp_branch, ['force'=>true]);
         } catch(\Exception $ex) { /** the branch not found */ }
 
         $git->checkout->create($temp_branch, $parent_branch);
