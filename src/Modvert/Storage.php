@@ -15,6 +15,7 @@ use Modvert\Filesystem\ResourceWriter;
 use Modvert\Resource\IResource;
 use Modvert\Resource\Repository;
 use Modvert\Resource\ResourceType;
+use Modvert\Application;
 use PHPixie\Database\Connection;
 
 /**
@@ -59,6 +60,7 @@ class Storage implements IStorage
         foreach (ResourceType::asArray() as $type) {
             $resources = $repository->getAll($type);
             $writer = FilesystemFactory::getWriter($type);
+            Application::getInstance()->getOutput()->writeln(sprintf('<question>count: %s; type:%s</question>', count($resources), $type));
             foreach ($resources as $resource) {
                 $writer->write($resource);
             }

@@ -43,6 +43,11 @@ class Application extends Singleton implements IModvert
       $this->output = $output;
     }
 
+    public function getOutput()
+    {
+      return $this->output;
+    }
+
     public function init()
     {
       if (!$this->app_path) $this->setAppPath(getcwd());
