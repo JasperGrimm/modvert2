@@ -22,4 +22,10 @@ class DatabaseDriverCest
         $driver = new DatabaseDriver($I->getConnection());
         dump($driver->truncate(ResourceType::CHUNK));
     }
+
+    public function tryToGetLocks(UnitTester $I)
+    {
+        $driver = new DatabaseDriver($I->getConnection());
+        $driver->isLocked();
+    }
 }

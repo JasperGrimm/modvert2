@@ -83,4 +83,9 @@ class RemoteDriver implements IDriver
     {
         // TODO: Implement isChanged() method.
     }
+
+    public function isLocked()
+    {
+        return $this->get('locked');
+    }
 }
