@@ -107,7 +107,7 @@ class Application extends Singleton implements IModvert
 
         $storage->loadRemote($stage);
 
-        $storage_changes = ArrayHelper::matchValue($status['changes'], 'file', '/^storage/');
+        $storage_changes = ArrayHelper::matchValue($git->status()['changes'], 'file', '/^storage/');
         if (count($storage_changes)) {
           $this->output->writeln('<info>You have unstaged remote changes! Commit them and merge with main branch!</info>');
         } else {
