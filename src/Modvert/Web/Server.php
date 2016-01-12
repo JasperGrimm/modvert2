@@ -50,13 +50,17 @@ class Server
         if (!$q) {
             $this->response(['error' => '?q must be specified!'], 500);
         }
+        $repo = new Repository();
+        $repo->setDriver(new DatabaseDriver(Application::getInstance()->getConnection()));
         $path_info = explode('/', $q);
         $type = $path_info[0];
+        if ('locks' === $type) {
+            $this->response(['locked' => $repo->isLocked()]);
+            return;
+        }
         if (!$type || !in_array($type, ['chunk', 'snippet', 'content', 'tv', 'template', 'category']))
           $this->response(['error' => 'Type must be specified!'], 500);
         $pk = (count($path_info) > 1) ? $path_info[1] : null;
-        $repo = new Repository();
-        $repo->setDriver(new DatabaseDriver(Application::getInstance()->getConnection()));
         if ('GET' === $request->method()) {
             if (!$pk) {
                 $items = $repo->getAll($type);

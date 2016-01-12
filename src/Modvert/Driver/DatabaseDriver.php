@@ -204,14 +204,15 @@ class DatabaseDriver implements IDriver {
     {
         $locks = $this->connection->selectQuery()
           ->table('modx_active_users')
-          ->and(function($query){ $query->where('action', 78); }) // htmlsnippets
-          ->or(function($query){ $query->where('action', 16); }) // templates
-          ->or(function($query){ $query->where('action', 22); }) // snippets
-          ->or(function($query){ $query->where('action', 102); }) // plugins
-          ->or(function($query){ $query->where('action', 301); }) // tmplvars
+          ->and('action', 78) // htmlsnippets
+          ->or('action', 27) // content
+          ->or('action', 16) // templates
+          ->or('action', 22) // snippets
+          ->or('action', 102) // plugins
+          ->or('action', 301) // tmplvars
           ->execute()
           ->asArray();
 
-        dump($locks);  
+        return (0 < count($locks)); 
     }
 }

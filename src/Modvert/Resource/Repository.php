@@ -83,4 +83,9 @@ class Repository implements IRepository
     {
        $this->driver->insert($resource);
     }
+
+    public function isLocked()
+    {
+        return $this->driver->isLocked();
+    }
 }
