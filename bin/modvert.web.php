@@ -26,6 +26,7 @@ if (file_exists($path)) {
    }
 }
 define('TARGET_PATH', $_SERVER['DOCUMENT_ROOT']);
+define('APP_ENV', 'production');
 
 /** @var \Modvert\Application $app */
 $app = \Modvert\Application::getInstance();
