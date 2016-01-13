@@ -1,6 +1,10 @@
-* Funny how things just seemed so easy. (c) "The Cranberries - When We Were Young"
+# Modvert2
+*Modx sync and versioning tool*
 
-———————————
+[![Build
+Status](https://travis-ci.org/JasperGrimm/modvert2.svg?branch=develop)](https://travis-ci.org/JasperGrimm/modvert2)
+
+
 # Установка
 ```
 composer require vestnik/modvert2:dev-develop
@@ -22,5 +26,3 @@ bin/modvert.cli.php load-remote --stage=staging
 or
 bin/modvert.cli.php load-remote --stage=test
 ```
-
-##### 
