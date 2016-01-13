@@ -79,7 +79,7 @@ class Application extends Singleton implements IModvert
 
         if ($repository->isLocked()) { // If remote stage is Locked
             $this->output->writeln('<error>Local database is locked. Please try again!</error>');
-            exit 1;
+            exit(1);
         }
         $this->output->writeln(sprintf('<info>[stage=%s]</info>', $stage));
         $this->config() && $this->stage = $stage;
