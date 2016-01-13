@@ -35,8 +35,8 @@ class RemoteDriver implements IDriver
 
     private function get($path)
     {
-        $res = $this->client->request('GET', $this->config->get('stages.' . $this->stage)['remote_url'] . '?q=' . $path);
-        return json_decode($res->getBody()->getContents(), true);
+        $res = $this->client->get($this->config->get('stages.' . $this->stage)['remote_url'] . '?q=' . $path);
+        return $res->json();
     }
 
     /**
