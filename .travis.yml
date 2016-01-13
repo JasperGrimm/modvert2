@@ -1,6 +1,11 @@
 language: php
 php:
   - '5.4'
+services:
+  - mysql
+before_install:
+  - mysql -e "create database IF NOT EXISTS akorsun_questoria_temp;" -uroot
+  - mysql -uroot akorsun_questoria_temp < tests/db.sql
 before_script:
   - "composer install"
 script:
