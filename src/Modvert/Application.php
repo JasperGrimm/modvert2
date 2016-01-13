@@ -72,6 +72,15 @@ class Application extends Singleton implements IModvert
      */
     public function build($stage)
     {
+        /** @var $resource IResource **/
+        $repository = new Repository();
+        $driver = new DatabaseDriver($this->getConnection());
+        $repository->setDriver($driver);
+
+        if ($repository->isLocked()) { // If remote stage is Locked
+            $this->output->writeln('<error>Local database is locked. Please try again!</error>');
+            exit 1;
+        }
         $this->output->writeln(sprintf('<info>[stage=%s]</info>', $stage));
         $this->config() && $this->stage = $stage;
         $storage = new Storage($this->getConnection());
