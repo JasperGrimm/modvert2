@@ -26,3 +26,7 @@ bin/modvert.cli.php load-remote --stage=staging
 or
 bin/modvert.cli.php load-remote --stage=test
 ```
+
+##### Ошибки
+
+<span style="color:orange;">Remote stage is locked. Please try again!</span> - На удаленном stage кто-то еще правит ресурс. Необходимо дождаться завершение редактирования, чтобы загрузить стабильную последнюю версию ресурса
