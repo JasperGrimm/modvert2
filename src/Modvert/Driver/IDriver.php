@@ -13,6 +13,7 @@ interface IDriver {
 	public function insert(IResource $resource);
 	public function update(IResource $resource);
 	public function remove($type, $id);
+	public function truncate($type);
 
 	/**
 	 * Return TRUE, if passed resource is different with this resource stored in current store

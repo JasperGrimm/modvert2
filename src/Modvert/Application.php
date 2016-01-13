@@ -10,8 +10,14 @@ namespace Modvert;
 
 use Noodlehaus\Config;
 use PHPGit\Exception\GitException;
+use PHPGit\Git;
 use PHPixie\Database\Connection;
 use Modvert\Web\Server;
+use Modvert\Application;
+use \Modvert\Helper\ArrayHelper;
+use Modvert\Resource\Repository;
+use Modvert\Driver\RemoteDriver;
+use Modvert\Driver\DatabaseDriver;
 
 class Application extends Singleton implements IModvert
 {
@@ -28,102 +34,109 @@ class Application extends Singleton implements IModvert
 
     protected $app_path;
 
+    protected $output;
+
     /**
      * @var Connection
      */
     protected $connection;
 
-    /**
-     * @return History
-     */
-    public function createHistory()
+    public function setOutput($output)
     {
-        return History::getInstance()->setConnection($this->getConnection());
+      $this->output = $output;
     }
 
-    /**
-     * @return Git
-     */
-    public function createRepo()
+    public function getOutput()
     {
-        /** @var Git $git */
-        return Git::getInstance()->path($this->app_path);
-    }
-
-    /**
-     * 1. I'm on a HEAD of branch
-     * 2. Check has unstaged?
-     * 2.yes. Print error message
-     * 3. Checkout to the last synced revision
-     * 4. Check has changed files in the storage. Diff to the HEAD ?
-     * 4.yes. Mark "Need For Push"
-     * 5. Checkout to the HEAD of the branch
-     * 6. Load resources data from the remote stage to the local storage
-     * 7. Check has changed files in the storage ?
-     * 7.yes. Commit changes and
-     * @param $stage
-     * @throws GitException
-     */
-    public function sync($stage)
-    {
-        $this->config() && $this->stage = $stage;
-        /** @var Git $git */
-        $git = $this->createRepo();
-        try {
-            $git->dropTempRemoteBranch();
-        } catch (\Exception $ex) {}
-        $main_branch = $git->getCurrentBranch();
-        /** @var History $history */
-        $history = $this->createHistory();
-        $storage = new Storage($this->getConnection());
-        if ($rev = $history->getLastSyncedRevision($main_branch)) {
-            $last_sync_revision = $rev->revision;
-        } else {
-            throw new \Exception('Please run command `bin/modvert.cli.php init` before!');
-        }
-        $git->setLastSyncedRevision($last_sync_revision);
-
-        if($git->hasUnstagedChanges()) {
-            throw new GitException('Please commit your changes and try again!');
-        }
-
-        $git->checkoutToLastRevision();
-
-        self::$need_for_push = !empty($git->diff($main_branch, $last_sync_revision));
-
-        $git->checkoutToTempRemoteBranch();
-        try {
-            /**
-             * Then load from remote
-             */
-            $storage->loadRemote($stage);
-            if($git->hasUnstagedChanges()) {
-                $git->fix();
-                self::$need_merge = true;
-            }
-            $git->checkout($main_branch);
-            if (self::$need_merge) {
-                $git->mergeTempRemoteBranch();
-            }
-        } catch(\Exception $ex) {
-            $git->checkout($main_branch);
-            throw $ex;
-        }
-        $git->dropTempRemoteBranch();
-
-        if (self::$need_for_push) {
-            $git->refresh();
-            $history->commit($git->getCurrentRevision(), $main_branch);
-            die('Remote sync');
-        }
+      return $this->output;
     }
 
     public function init()
     {
-        /** @var History $history */
-        $history = $this->createHistory();
-        $git = $this->createRepo();
-        $history->commit($git->getCurrentRevision(), $git->getCurrentBranch());
+      if (!$this->app_path) $this->setAppPath(getcwd());
+    }
+
+    public function dump($stage)
+    {
+        $this->output->writeln(sprintf('<info>[stage=%s]</info>', $stage));
+        $this->config() && $this->stage = $stage;
+        $storage = new Storage($this->getConnection());
+        //$storage->loadRemote($stage);
+        $storage->loadLocal();
+    }
+
+    /**
+     * [build description]
+     * @param  [type] $stage [description]
+     * @return [type]        [description]
+     */
+    public function build($stage)
+    {
+        /** @var $resource IResource **/
+        $repository = new Repository();
+        $driver = new DatabaseDriver($this->getConnection());
+        $repository->setDriver($driver);
+
+        if ($repository->isLocked()) { // If remote stage is Locked
+            $this->output->writeln('<error>Local database is locked. Please try again!</error>');
+            exit(1);
+        }
+        $this->output->writeln(sprintf('<info>[stage=%s]</info>', $stage));
+        $this->config() && $this->stage = $stage;
+        $storage = new Storage($this->getConnection());
+        $storage->buildFromFiles();
+    }
+
+    /**
+     * 1. Checkout to new branch modvert/test based on origin/test
+     * or movert/develop based on origin/develop
+     * 2. Load remote resources
+     * 3. Show message:
+     *   1. Check changes `git diff --name-only -- storage`
+     *   2. Commit if has changes
+     *   3. Checkout to the main branch (test/develop/feature/QUES-*)
+     *   4. Merge `git merge movert/test` or `git merge movert/develop`
+     *
+     * Если
+     */
+    public function loadRemote($stage)
+    {
+
+        /** @var $resource IResource **/
+        $repository = new Repository();
+        $driver = new RemoteDriver($stage);
+        $repository->setDriver($driver);
+
+        if ($repository->isLocked()) { // If remote stage is Locked
+            return $this->output->writeln('<error>Remote stage is locked. Please try again!</error>');
+        }
+
+        $storage = new Storage($this->getConnection());
+        $git = new Git();
+        $git->setRepository(Application::getInstance()->getAppPath());
+        $status = $git->status();
+        $current_branch = $status['branch'];
+        // do not checkout if has unstaged changes
+        if (count($status['changes'])) {
+          return $this->output->writeln('<error>Please commit changes before!</error>');
+        }
+
+        $temp_branch = 'modvert/develop';
+        $parent_branch = 'origin/develop';
+        try {
+            $git->branch->delete($temp_branch, ['force'=>true]);
+        } catch(\Exception $ex) { /** the branch not found */ }
+
+        $git->checkout->create($temp_branch, $parent_branch);
+
+        $storage->loadRemote($stage);
+
+        $storage_changes = ArrayHelper::matchValue($git->status()['changes'], 'file', '/^storage/');
+        if (count($storage_changes)) {
+          $this->output->writeln('<info>You have unstaged remote changes! Commit them and merge with main branch!</info>');
+        } else {
+          $git->checkout($current_branch);
+        }
     }
 
     public function config()
@@ -137,6 +150,11 @@ class Application extends Singleton implements IModvert
     public function setAppPath($app_path)
     {
         $this->app_path = $app_path;
+    }
+
+    public function getAppPath()
+    {
+      return $this->app_path;
     }
 
     public function stage()

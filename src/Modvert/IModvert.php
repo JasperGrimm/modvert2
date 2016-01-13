@@ -1,5 +1,6 @@
 <?php namespace Modvert;
 
 interface IModvert {
-	public function sync($stage);
+	public function dump($stage);
+	public function build($stage);
 }

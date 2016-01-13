@@ -11,6 +11,7 @@ namespace Modvert\Resource;
 
 use Modvert\Driver\IDriver;
 use Modvert\Driver\RemoteDriver;
+use Modvert\Resource\IResource;
 
 class Repository implements IRepository
 {
@@ -71,5 +72,20 @@ class Repository implements IRepository
     public function updateOnce(IResource $resource)
     {
         $this->driver->update($resource);
+    }
+
+    public function truncate($type)
+    {
+        $this->driver->truncate($type);
+    }
+
+    public function add(IResource $resource)
+    {
+       $this->driver->insert($resource);
+    }
+
+    public function isLocked()
+    {
+        return $this->driver->isLocked();
     }
 }

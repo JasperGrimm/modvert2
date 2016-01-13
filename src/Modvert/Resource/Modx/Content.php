@@ -65,4 +65,10 @@ class Content extends Resource
     {
         $this->name = $data['alias'] . '_' . $data['id'];
     }
+
+    public function getName()
+    {
+        if (!$this->name || empty($this->name)) $this->setName($this->data);
+        return $this->name;
+    }
 }

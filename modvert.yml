@@ -4,7 +4,7 @@ database:
   port: 33060
   user: "questoria"
   password: "questoria"
-  name: "akorsun_questoria_prod"
+  name: "akorsun_questoria_temp"
   prefix: "qst_"
 default_stage: 'test'
 stages:

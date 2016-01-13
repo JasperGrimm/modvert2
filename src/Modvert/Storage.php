@@ -12,8 +12,10 @@ use Modvert\Driver\DatabaseDriver;
 use Modvert\Driver\RemoteDriver;
 use Modvert\Filesystem\FilesystemFactory;
 use Modvert\Filesystem\ResourceWriter;
+use Modvert\Resource\IResource;
 use Modvert\Resource\Repository;
 use Modvert\Resource\ResourceType;
+use Modvert\Application;
 use PHPixie\Database\Connection;
 
 /**
@@ -58,6 +60,7 @@ class Storage implements IStorage
         foreach (ResourceType::asArray() as $type) {
             $resources = $repository->getAll($type);
             $writer = FilesystemFactory::getWriter($type);
+            Application::getInstance()->getOutput()->writeln(sprintf('<question>count: %s; type:%s</question>', count($resources), $type));
             foreach ($resources as $resource) {
                 $writer->write($resource);
             }
@@ -91,5 +94,26 @@ class Storage implements IStorage
     public function pushToRemote($stage)
     {
         // TODO: Implement pushToRemote() method.
+    }
+
+    public function buildFromFiles()
+    {
+        /** @var $resource IResource **/
+        $repository = new Repository();
+        $driver = new DatabaseDriver($this->getDatabaseConnection());
+        $repository->setDriver($driver);
+        foreach (ResourceType::asArray() as $type) {
+          $repository->truncate($type);
+          $reader = FilesystemFactory::getReader($type);
+          $resources = $reader->read();
+          foreach ($resources as $resource) {
+            $repository->add($resource);
+          }
+            // $resources = $repository->getAll($type);
+            // $writer = FilesystemFactory::getWriter($type);
+            // foreach ($resources as $resource) {
+            //     $writer->write($resource);
+            // }
+        }
     }
 }

@@ -2,8 +2,8 @@
   "name": "vestnik/modvert2",
   "description": "Modx vesioning tool ver2.0",
   "require": {
-    "phpspec/php-diff": "*",
     "kzykhys/git": "3.0",
+    "phpspec/php-diff": "*",
     "symfony/process": "^2.7",
     "symfony/var-dumper": "^2.7",
     "symfony/options-resolver": "^2.7",

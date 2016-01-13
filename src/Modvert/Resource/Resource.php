@@ -1,4 +1,5 @@
 <?php namespace Modvert\Resource;
+use Modvert\StringUtil;
 
 abstract class Resource implements IResource {
 
@@ -65,7 +66,7 @@ abstract class Resource implements IResource {
 
 	protected function specialEscape($str)
 	{
-		return preg_replace("/(?<!\\\\)'/sm", '\\\'', $str);
+		return StringUtil::specialEscape($str);
 	}
 
 	abstract public function getInfo();
@@ -116,5 +117,10 @@ abstract class Resource implements IResource {
 	public function getData()
 	{
 		return $this->data;
+	}
+
+	public function getRawData()
+	{
+		return $this->getData();
 	}
 }

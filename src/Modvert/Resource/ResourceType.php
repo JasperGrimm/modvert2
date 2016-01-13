@@ -19,4 +19,9 @@ class ResourceType {
 			self::TV
 		];
 	}
+
+	public static function isValid($type)
+	{
+			return in_array($type, self::asArray());
+	}
 }
