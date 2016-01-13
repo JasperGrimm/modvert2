@@ -27,7 +27,7 @@ if (file_exists($path)) {
 }
 
 define('TARGET_PATH', getcwd());
-
+define('APP_ENV', 'production');
 /** @var \Modvert\Application $app */
 $app = \Modvert\Application::getInstance();
 $app->setAppPath(TARGET_PATH);

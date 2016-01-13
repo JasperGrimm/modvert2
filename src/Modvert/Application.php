@@ -166,7 +166,7 @@ class Application extends Singleton implements IModvert
     {
         if (!$this->connection) {
             $slice = new \PHPixie\Slice();
-            $db_config = $this->config()->get('database');
+            $db_config = $this->config()->get('database' . (APP_ENV ==='test' ? '.test' : ''));
             $dsn = sprintf('mysql:host=%s:%d;dbname=%s',
                 $db_config['host'],
                 $db_config['port'],

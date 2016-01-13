@@ -6,6 +6,15 @@ database:
   password: "questoria"
   name: "akorsun_questoria_temp"
   prefix: "qst_"
+
+  test:
+    host: "localhost"
+    port: 3306
+    user: "travis"
+    password: ""
+    name: "akorsun_questoria_temp"
+    prefix: "qst_"
+
 default_stage: 'test'
 stages:
     staging:

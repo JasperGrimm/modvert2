@@ -9,4 +9,4 @@ before_install:
 before_script:
   - "composer install"
 script:
-  - "php vendor/codeception/codeception/codecept run unit"
+  - "ENV=test php vendor/codeception/codeception/codecept run unit"
