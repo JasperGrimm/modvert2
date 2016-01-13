@@ -167,7 +167,7 @@ class Application extends Singleton implements IModvert
         if (!$this->connection) {
             $slice = new \PHPixie\Slice();
             $db_config = $this->config()->get('database' . (APP_ENV ==='test' ? '.test' : ''));
-            $dsn = sprintf('mysql:host=%s:%d;dbname=%s',
+            $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s',
                 $db_config['host'],
                 $db_config['port'],
                 $db_config['name']
@@ -180,7 +180,11 @@ class Application extends Singleton implements IModvert
                     'password' => $db_config['password']
                 )
             )));
-            $this->connection = $database->get();
+            try {
+                $this->connection = $database->get();
+            } catch (\Exception $ex) {
+                dump($ex);
+            }
         }
         return $this->connection;
     }
