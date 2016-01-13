@@ -15,6 +15,9 @@ use PHPixie\Database\Connection;
 use Modvert\Web\Server;
 use Modvert\Application;
 use \Modvert\Helper\ArrayHelper;
+use Modvert\Resource\Repository;
+use Modvert\Driver\RemoteDriver;
+use Modvert\Driver\DatabaseDriver;
 
 class Application extends Singleton implements IModvert
 {
@@ -84,9 +87,21 @@ class Application extends Singleton implements IModvert
      *   2. Commit if has changes
      *   3. Checkout to the main branch (test/develop/feature/QUES-*)
      *   4. Merge `git merge movert/test` or `git merge movert/develop`
+     *
+     * Если
      */
     public function loadRemote($stage)
     {
+
+        /** @var $resource IResource **/
+        $repository = new Repository();
+        $driver = new RemoteDriver($stage);
+        $repository->setDriver($driver);
+
+        if ($repository->isLocked()) { // If remote stage is Locked
+            return $this->output->writeln('<error>Remote stage is locked. Please try again!</error>');
+        }
+
         $storage = new Storage($this->getConnection());
         $git = new Git();
         $git->setRepository(Application::getInstance()->getAppPath());

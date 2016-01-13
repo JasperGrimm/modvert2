@@ -115,6 +115,5 @@ class Storage implements IStorage
             //     $writer->write($resource);
             // }
         }
-
     }
 }
