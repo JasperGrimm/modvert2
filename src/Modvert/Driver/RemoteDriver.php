@@ -86,7 +86,7 @@ class RemoteDriver implements IDriver
 
     public function isLocked()
     {
-        $locked = $this->get('locked');
+        $locked = $this->get('locks');
         return $locked['locked'];
     }
 }
