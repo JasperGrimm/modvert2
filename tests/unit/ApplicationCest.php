@@ -14,12 +14,12 @@ class ApplicationCest
     public function tryToSync(UnitTester $I)
     {
         $app = \Modvert\Application::getInstance();
-        $app->sync('test');
+        $app->dump('test');
     }
 
     public function tryToLoadRemote(UnitTester $I)
     {
       $app = \Modvert\Application::getInstance();
-      $app->loadRemote(); 
+      $app->loadRemote('test');
     }
 }

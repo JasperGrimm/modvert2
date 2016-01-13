@@ -9,8 +9,8 @@ database:
 default_stage: 'test'
 stages:
     staging:
-        remote_url: 'http://staging.questoria.ru'
+        remote_url: 'http://staging.questoria.ru/vendor/vestnik/modvert2/bin/modvert.web.php'
     test:
-        remote_url: 'http://test.questoria.ru'
+        remote_url: 'http://test.questoria.ru/vendor/vestnik/modvert2/bin/modvert.web.php'
     development:
-        remote_url: 'http://modvert.loc'
+        remote_url: 'http://modvert.loc/vendor/vestnik/modvert2/bin/modvert.web.php'
