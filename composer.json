@@ -2,18 +2,18 @@
   "name": "vestnik/modvert2",
   "description": "Modx vesioning tool ver2.0",
   "require": {
+    "symfony/process": "^2.6",
+    "symfony/var-dumper": "^2.6",
+    "symfony/console": "^2.6",
+    "symfony/yaml": "^2.6",
     "kzykhys/git": "3.0",
     "phpspec/php-diff": "*",
-    "symfony/process": "^2.7",
-    "symfony/var-dumper": "^2.7",
     "phpixie/database": "^3.1",
     "twig/twig": "^1.23",
     "noodlehaus/config": "1.0",
     "guzzlehttp/guzzle": "5.3.0",
     "phpixie/http": "^3.1",
-    "zumba/json-serializer": "^1.0",
-    "symfony/console": "^2.7",
-    "symfony/yaml": "^2.7"
+    "zumba/json-serializer": "^1.0"
   },
   "require-dev": {
     "codeception/codeception": "^2.1",
