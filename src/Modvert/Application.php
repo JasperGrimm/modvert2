@@ -118,7 +118,13 @@ class Application extends Singleton implements IModvert
         $current_branch = $status['branch'];
         // do not checkout if has unstaged changes
         if (count($status['changes'])) {
-          return $this->output->writeln('<error>Please commit changes before!</error>');
+          if (!(
+            count($status['changes']) == 1
+            &&
+            ArrayHelper::matchValue($git->status()['changes'], 'file', '/^manager/')
+          )) {
+              return $this->output->writeln('<error>Please commit changes before!</error>');
+          }
         }
 
         $temp_branch = 'modvert/develop';
