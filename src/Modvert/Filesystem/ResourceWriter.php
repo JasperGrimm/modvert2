@@ -42,7 +42,7 @@ class ResourceWriter implements IResourceWriter
             sleep(1);
         }
         if (!$this->save($path . DIRECTORY_SEPARATOR . $resource->getName(). '.model', $content)) {
-            mkdir($path, 0777, true);
+            @mkdir($path, 0777, true);
             sleep(1);
             $this->save($path . DIRECTORY_SEPARATOR . $resource->getName(). '.model', $content);
         }
