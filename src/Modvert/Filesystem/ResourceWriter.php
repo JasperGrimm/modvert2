@@ -11,6 +11,7 @@ namespace Modvert\Filesystem;
 
 use Modvert\Resource\IResource;
 use Modvert\Serializer\ISerializer;
+use Modvert\StringUtil;
 
 class ResourceWriter implements IResourceWriter
 {
@@ -30,7 +31,15 @@ class ResourceWriter implements IResourceWriter
     }
 
     private function save($path, $content) {
-        return @file_put_contents($path, $content);
+        // register the filter
+        stream_filter_register('crlf', '\Modvert\CrlfFilter');
+        $content = StringUtil::toUnix($content);
+        $f = fopen($path, 'wt');
+        // attach filter to output file
+        stream_filter_append($f, 'crlf');
+        // start writing
+        fwrite($f, $content);
+        fclose($f);
     }
 
     public function write(IResource $resource)
@@ -41,10 +50,11 @@ class ResourceWriter implements IResourceWriter
             mkdir($path, 0777, true);
             sleep(1);
         }
-        if (!$this->save($path . DIRECTORY_SEPARATOR . $resource->getName(). '.model', $content)) {
+        $file_path = $path . DIRECTORY_SEPARATOR . StringUtil::transliterate($resource->getName()). '.model';
+        if (!$this->save($file_path, $content)) {
             @mkdir($path, 0777, true);
             sleep(1);
-            $this->save($path . DIRECTORY_SEPARATOR . $resource->getName(). '.model', $content);
+            $this->save($file_path, $content);
         }
     }
 }

@@ -8,16 +8,16 @@
 
 namespace Modvert;
 
+use Modvert\Resource\IResource;
 use Noodlehaus\Config;
-use PHPGit\Exception\GitException;
 use PHPGit\Git;
 use PHPixie\Database\Connection;
 use Modvert\Web\Server;
-use Modvert\Application;
 use \Modvert\Helper\ArrayHelper;
 use Modvert\Resource\Repository;
 use Modvert\Driver\RemoteDriver;
 use Modvert\Driver\DatabaseDriver;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends Singleton implements IModvert
 {
@@ -34,6 +34,9 @@ class Application extends Singleton implements IModvert
 
     protected $app_path;
 
+    /**
+     * @var OutputInterface
+     */
     protected $output;
 
     /**

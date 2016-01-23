@@ -63,7 +63,7 @@ class Content extends Resource
 
     public function setName($data)
     {
-        $this->name = $data['alias'] . '_' . $data['id'];
+        $this->name =  $data['id'] . '-' . $data['alias'];
     }
 
     public function getName()

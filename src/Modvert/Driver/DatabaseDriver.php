@@ -215,4 +215,12 @@ class DatabaseDriver implements IDriver {
 
         return (0 < count($locks)); 
     }
+
+    /**
+     * Возвращает
+     */
+    public function getLocks()
+    {
+
+    }
 }

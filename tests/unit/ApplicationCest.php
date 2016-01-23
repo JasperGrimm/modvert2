@@ -13,13 +13,13 @@ class ApplicationCest
     // tests
     public function tryToSync(UnitTester $I)
     {
-        $app = \Modvert\Application::getInstance();
-        $app->dump('test');
+//        $app = \Modvert\Application::getInstance();
+//        $app->dump('test');
     }
 
     public function tryToLoadRemote(UnitTester $I)
     {
-      $app = \Modvert\Application::getInstance();
-      $app->loadRemote('test');
+//      $app = \Modvert\Application::getInstance();
+//      $app->loadRemote('test');
     }
 }
