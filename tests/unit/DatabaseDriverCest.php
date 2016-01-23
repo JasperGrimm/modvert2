@@ -35,4 +35,23 @@ class DatabaseDriverCest
         $driver = new DatabaseDriver($I->getConnection());
         $r = $driver->unlock();
     }
+
+    public function testToTryTruncate(UnitTester $I)
+    {
+        /** @var PHPixie\Database\Connection $con */
+        $con = $I->getConnection();
+
+        $driver = new DatabaseDriver($con);
+        $driver->truncate(ResourceType::CATEGORY);
+        $con->insertQuery()
+            ->table('modx_categories')
+            ->data([
+                'id'    => 1,
+                'category' => 'Hello'
+            ])->execute();
+
+        $count = $con->countQuery()->table('modx_categories')->execute();
+
+        $I->assertEquals(intval($count), 1);
+    }
 }
