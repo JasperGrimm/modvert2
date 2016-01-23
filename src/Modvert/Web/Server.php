@@ -46,13 +46,13 @@ class Server
     public function handle()
     {
         $this->http = new HTTP(new Slice()); $request = $this->request();
+        $repo = new Repository();
+        $repo->setDriver(new DatabaseDriver(Application::getInstance()->getConnection()));
         if ('GET' === $request->method()) {
             $q = $request->query()->get('q');
             if (!$q) {
                 $this->response(['error' => '?q must be specified!'], 500);
             }
-            $repo = new Repository();
-            $repo->setDriver(new DatabaseDriver(Application::getInstance()->getConnection()));
             $path_info = explode('/', $q);
 
             $type = $path_info[0];
@@ -74,7 +74,7 @@ class Server
         } elseif ('POST' === $request->method()) {
             $action = $request->data()->getData('action');
             if ($action === 'remove_locks') {
-
+                $this->response(['result' => $repo->unlock()], 201);
             } else {
                 $this->response(['error' => 'Unsupported operation!'], 500);
             }

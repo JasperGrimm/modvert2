@@ -93,4 +93,9 @@ class Repository implements IRepository
     {
         return $this->driver->getLocks();
     }
+
+    public function unlock()
+    {
+        return $this->driver->unlock();
+    }
 }

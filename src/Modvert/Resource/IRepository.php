@@ -35,4 +35,6 @@ interface IRepository {
 
 	public function getLocks();
 
+	public function unlock();
+
 }
