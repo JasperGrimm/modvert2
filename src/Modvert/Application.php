@@ -206,4 +206,22 @@ class Application extends Singleton implements IModvert
         $server = new Server();
         $server->handle();
     }
+
+    public function unlock()
+    {
+        /** @var $resource IResource **/
+        $repository = new Repository();
+        $driver = new DatabaseDriver($this->getConnection());
+        $repository->setDriver($driver);
+        return $repository->unlock();
+    }
+
+    public function unlockRemote($stage)
+    {
+        /** @var $resource IResource **/
+        $repository = new Repository();
+        $driver = new RemoteDriver($stage);
+        $repository->setDriver($driver);
+        return $repository->unlock();
+    }
 }
