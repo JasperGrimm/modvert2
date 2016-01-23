@@ -72,7 +72,7 @@ class Server
                 $this->response($repo->getOnce($type, $pk)->getData());
             }
         } elseif ('POST' === $request->method()) {
-            $action = $request->data()->getData();
+            $action = $request->data()->getData('action');
             var_dump($action);
         }
     }
