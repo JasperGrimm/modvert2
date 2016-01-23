@@ -88,6 +88,7 @@ class Storage implements IStorage
                 });
                 $writer->write($resource);
             }
+            echo PHP_EOL;
         }
     }
 
