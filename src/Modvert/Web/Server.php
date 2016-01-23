@@ -55,7 +55,7 @@ class Server
         $path_info = explode('/', $q);
         $type = $path_info[0];
         if ('locks' === $type) {
-            $this->response($repo->getLocks());
+            $this->response(['locks' => $repo->getLocks()]);
             return;
         }
         if (!$type || !in_array($type, ['chunk', 'snippet', 'content', 'tv', 'template', 'category']))
