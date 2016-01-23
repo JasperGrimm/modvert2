@@ -7,7 +7,6 @@
     "symfony/var-dumper": "^2.6",
     "symfony/console": "^2.6",
     "symfony/yaml": "^2.6",
-    "kzykhys/git": "3.0",
     "phpspec/php-diff": "*",
     "phpixie/database": "^3.1",
     "twig/twig": "^1.23",
@@ -16,7 +15,7 @@
     "phpixie/http": "^3.1",
     "zumba/json-serializer": "^1.0",
     "guiguiboy/php-cli-progress-bar": "dev-master",
-    "symfony/options-resolver": ">=2.3"
+    "vestnik/phpgit": "^0.1.2"
   },
   "require-dev": {
     "codeception/codeception": "^2.1",
@@ -36,23 +35,6 @@
     }
   },
   "repositories": [
-    {
-      "type": "package",
-      "package": {
-        "name": "kzykhys/git",
-        "version": "3.0",
-        "source": {
-          "url": "https://github.com/Djakson/PHPGit.git",
-          "type": "git",
-          "reference": "origin/master"
-        },
-        "autoload": {
-          "psr-4": {
-            "PHPGit\\": "src/PHPGit"
-          }
-        }
-      }
-    },
     {
       "type": "package",
       "package": {
