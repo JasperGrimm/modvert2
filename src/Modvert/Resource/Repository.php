@@ -28,7 +28,7 @@ class Repository implements IRepository
     /**
      * Get collection of IResource
      * @param $type string
-     * @return Array<IResource>
+     * @return array<IResource>
      */
     public function getAll($type)
     {

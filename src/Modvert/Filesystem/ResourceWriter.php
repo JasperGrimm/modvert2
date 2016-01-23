@@ -38,8 +38,9 @@ class ResourceWriter implements IResourceWriter
         // attach filter to output file
         stream_filter_append($f, 'crlf');
         // start writing
-        fwrite($f, $content);
+        $r = fwrite($f, $content);
         fclose($f);
+        return $r;
     }
 
     public function write(IResource $resource)

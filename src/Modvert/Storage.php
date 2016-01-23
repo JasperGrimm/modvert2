@@ -80,9 +80,33 @@ class Storage implements IStorage
         foreach (ResourceType::asArray() as $type) {
             $resources = $repository->getAll($type);
             $writer = FilesystemFactory::getWriter($type);
-            foreach ($resources as $resource) {
+            $progressBar = new \ProgressBar\Manager(0, count($resources) + 1, 70);
+            $progressBar->setFormat('Import %current%/%max% [%bar%] %percent%% %resource_type%: %resource_name%');
+            $progressBar->addReplacementRule('%resource_type%', 600, function ($buffer, $registry) use ($type){
+                $max = 10;
+                $c = strlen($type);
+                if ($max > $c) {
+                    $type = $type . implode('', array_fill(0, $max-$c, ' '));
+                }
+                return $type;
+            });
+            $progressBar->addReplacementRule('%resource_name%', 500, function ($buffer, $registry) {
+                return implode('', array_fill(0, 40, ' '));
+            });
+            foreach ($resources as $i=>$resource) {
+                $progressBar->update($i);
+                $progressBar->addReplacementRule('%resource_name%', 500, function ($buffer, $registry) use ($resource){
+                    $name = $resource->getName();
+                    $max = 45;
+                    $c = strlen($name);
+                    if ($max > $c) {
+                        $name = $name . implode('', array_fill(0, $max-$c, ' '));
+                    }
+                    return $name;
+                });
                 $writer->write($resource);
             }
+            echo PHP_EOL;
         }
         return [];
     }
