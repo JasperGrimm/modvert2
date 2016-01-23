@@ -49,7 +49,7 @@ class RemoteDriver implements IDriver
         $res = $this->client->post(
             $this->config->get('stages.' . $this->stage)['remote_url'],
             [
-                'json' => $data
+                'body' => $data
             ]
         );
         return $res->json();
