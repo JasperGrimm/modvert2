@@ -33,4 +33,6 @@ interface IRepository {
 	 */
 	public function updateOnce(IResource $resource);
 
+	public function getLocks();
+
 }
