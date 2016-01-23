@@ -73,7 +73,11 @@ class Server
             }
         } elseif ('POST' === $request->method()) {
             $action = $request->data()->getData('action');
-            var_dump($action);
+            if ($action === 'remove_locks') {
+
+            } else {
+                $this->response(['error' => 'Unsupported operation!'], 500);
+            }
         }
     }
 }
