@@ -53,15 +53,16 @@ class Server
         $repo = new Repository();
         $repo->setDriver(new DatabaseDriver(Application::getInstance()->getConnection()));
         $path_info = explode('/', $q);
+
         $type = $path_info[0];
-        if ('locks' === $type) {
-            $this->response(['locks' => $repo->getLocks()]);
-            return;
-        }
-        if (!$type || !in_array($type, ['chunk', 'snippet', 'content', 'tv', 'template', 'category']))
-          $this->response(['error' => 'Type must be specified!'], 500);
-        $pk = (count($path_info) > 1) ? $path_info[1] : null;
         if ('GET' === $request->method()) {
+            if ('locks' === $type) {
+                $this->response(['locks' => $repo->getLocks()]);
+                return;
+            }
+            if (!$type || !in_array($type, ['chunk', 'snippet', 'content', 'tv', 'template', 'category']))
+                $this->response(['error' => 'Type must be specified!'], 500);
+            $pk = (count($path_info) > 1) ? $path_info[1] : null;
             if (!$pk) {
                 $items = $repo->getAll($type);
                 $this->response(array_map(function($item){
@@ -71,7 +72,8 @@ class Server
                 $this->response($repo->getOnce($type, $pk)->getData());
             }
         } elseif ('POST' === $request->method()) {
-
+            $action = $request->data()->get('action');
+            dump($action);
         }
     }
 }

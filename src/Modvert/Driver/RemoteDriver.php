@@ -24,6 +24,11 @@ class RemoteDriver implements IDriver
 
     protected $stage;
 
+    /**
+     * @var Client
+     */
+    private $client;
+
     public function __construct($stage)
     {
         /** @var Application $app */
@@ -38,6 +43,18 @@ class RemoteDriver implements IDriver
         $res = $this->client->get($this->config->get('stages.' . $this->stage)['remote_url'] . '?q=' . $path);
         return $res->json();
     }
+
+    private function post($data=[])
+    {
+        $res = $this->client->post(
+            $this->config->get('stages.' . $this->stage)['remote_url'],
+            [
+                'json' => $data
+            ]
+        );
+        return $res->json();
+    }
+
 
     /**
      * @param $type
@@ -92,11 +109,12 @@ class RemoteDriver implements IDriver
 
     public function getLocks()
     {
-        return $this->get('locks');
+        $r = $this->get('locks');
+        return $r['locks'];
     }
 
     public function unlock()
     {
-        // TODO: Implement unlock() method.
+        $this->post(['action'=>'remove_locks']);
     }
 }
