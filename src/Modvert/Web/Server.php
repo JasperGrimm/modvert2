@@ -73,7 +73,7 @@ class Server
             }
         } elseif ('POST' === $request->method()) {
             $action = $request->data()->get('action');
-            dump($action);
+            var_dump($action);
         }
     }
 }
