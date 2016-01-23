@@ -16,6 +16,24 @@ class DatabaseDriver implements IDriver {
         ResourceType::TV => 'modx_site_tmplvars'
     ];
 
+    protected $resource_types = [
+        16 => ResourceType::TEMPLATE,
+        22 => ResourceType::SNIPPET,
+        27 => ResourceType::CONTENT,
+        78 => ResourceType::CHUNK,
+        102 => 'plugins',
+        301 => ResourceType::TV
+    ];
+
+    protected $resource_types_reversed = [
+        ResourceType::TEMPLATE => 16,
+        ResourceType::SNIPPET => 22,
+        ResourceType::CONTENT => 27,
+        ResourceType::CHUNK => 78,
+        'plugins' => 102,
+        ResourceType::TV => 301
+    ];
+
     protected $tv_templates_table = 'modx_site_tmplvar_templates';
     protected $tv_content_values_table = 'modx_site_tmplvar_contentvalues';
 
@@ -202,18 +220,23 @@ class DatabaseDriver implements IDriver {
 
     public function isLocked()
     {
-        $locks = $this->connection->selectQuery()
-          ->table('modx_active_users')
-          ->and('action', 78) // htmlsnippets
-          ->or('action', 27) // content
-          ->or('action', 16) // templates
-          ->or('action', 22) // snippets
-          ->or('action', 102) // plugins
-          ->or('action', 301) // tmplvars
-          ->execute()
-          ->asArray();
-
+        $locks = $this->getLocks();
         return (0 < count($locks)); 
+    }
+
+    public function getLockedResourceName($action, $id)
+    {
+        $fields = ['name', 'id'];
+        $type = $this->resource_types[$action];
+        if (ResourceType::CONTENT === $type) {
+            $fields = ['alias', 'id'];
+        }
+        $r = $this->connection->selectQuery()
+            ->table($this->table_map[$type])
+            ->fields($fields)
+            ->where('id', $id)
+            ->execute();
+        return $type . ': ' . $r->get('id') . ' - ' . $r->get();
     }
 
     /**
@@ -221,6 +244,27 @@ class DatabaseDriver implements IDriver {
      */
     public function getLocks()
     {
+        $locks = $this->connection->selectQuery()
+            ->table('modx_active_users')
+            ->and('action', $this->resource_types_reversed[ResourceType::CHUNK]) // htmlsnippets
+            ->or('action', $this->resource_types_reversed[ResourceType::CONTENT]) // content
+            ->or('action', $this->resource_types_reversed[ResourceType::TEMPLATE]) // templates
+            ->or('action', $this->resource_types_reversed[ResourceType::SNIPPET]) // snippets
+            ->or('action', $this->resource_types_reversed[ResourceType::TV]) // tmplvars
+            ->execute()
+            ->asArray();
+        $l = [];
+        foreach ($locks as $lock) {
+                $l[] = ($this->getLockedResourceName($lock->action, $lock->id));
+        }
+        return $l;
+    }
 
+    public function unlock()
+    {
+        return $this->connection->deleteQuery()
+            ->table('modx_active_users')
+            ->execute()
+            ->asArray();
     }
 }

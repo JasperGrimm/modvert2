@@ -22,4 +22,8 @@ interface IDriver {
 	 * @return mixed
 	 */
 	public function isChanged(IResource $resource);
+
+	public function isLocked();
+	public function getLocks();
+	public function unlock();
 }

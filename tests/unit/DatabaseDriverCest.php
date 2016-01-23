@@ -26,6 +26,7 @@ class DatabaseDriverCest
     public function tryToGetLocks(UnitTester $I)
     {
         $driver = new DatabaseDriver($I->getConnection());
-        $driver->isLocked();
+        $locks = $driver->getLocks();
+        dump($locks);
     }
 }
