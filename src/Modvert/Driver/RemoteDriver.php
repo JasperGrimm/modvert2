@@ -115,6 +115,6 @@ class RemoteDriver implements IDriver
 
     public function unlock()
     {
-        $this->post(['action'=>'remove_locks']);
+        return $this->post(['action'=>'remove_locks']);
     }
 }

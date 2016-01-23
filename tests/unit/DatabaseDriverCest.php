@@ -29,4 +29,10 @@ class DatabaseDriverCest
         $locks = $driver->getLocks();
         dump($locks);
     }
+
+    public function tryToUnlock(UnitTester $I)
+    {
+        $driver = new DatabaseDriver($I->getConnection());
+        $r = $driver->unlock();
+    }
 }

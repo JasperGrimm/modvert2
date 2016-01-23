@@ -74,7 +74,8 @@ class Server
         } elseif ('POST' === $request->method()) {
             $action = $request->data()->getData('action');
             if ($action === 'remove_locks') {
-                $this->response(['result' => $repo->unlock()], 201);
+                $repo->unlock();
+                $this->response(['result' => 'ok'], 201);
             } else {
                 $this->response(['error' => 'Unsupported operation!'], 500);
             }
