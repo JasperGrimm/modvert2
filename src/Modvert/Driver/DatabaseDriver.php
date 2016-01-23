@@ -264,7 +264,7 @@ class DatabaseDriver implements IDriver {
     {
         return $this->connection->deleteQuery()
             ->table('modx_active_users')
-            ->execute()
-            ->asArray();
+            ->where('internalKey', '>', 0)
+            ->execute();
     }
 }
