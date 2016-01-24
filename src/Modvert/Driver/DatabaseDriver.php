@@ -1,11 +1,13 @@
 <?php namespace Modvert\Driver;
 
+use Modvert\Exceptions\ModvertDuplicateException;
 use Modvert\Resource\IResource;
 use Modvert\Resource\ResourceType;
 use PHPixie\Database\Connection;
 use Modvert\StringUtil;
 
-class DatabaseDriver implements IDriver {
+class DatabaseDriver implements IDriver
+{
 
     protected $table_map = [
         ResourceType::CHUNK => 'modx_site_htmlsnippets',
@@ -67,18 +69,18 @@ class DatabaseDriver implements IDriver {
         $item = ($items && count($items)) ? $items->current() : null;
 
         if ($type === ResourceType::TV) {
-          $items = $this->connection->selectQuery()
-              ->table($this->tv_templates_table)
-              ->fields(['templateid'])
-              ->where('tmplvarid', $id)
-              ->execute();
-          $item['templates'] = $items;
-          $items = $this->connection->selectQuery()
-              ->table($this->tv_content_values_table)
-              ->fields(['contentid', 'value'])
-              ->where('tmplvarid', $id)
-              ->execute();
-          $item['content_values'] = $items;
+            $items = $this->connection->selectQuery()
+                ->table($this->tv_templates_table)
+                ->fields(['templateid'])
+                ->where('tmplvarid', $id)
+                ->execute();
+            $item['templates'] = $items;
+            $items = $this->connection->selectQuery()
+                ->table($this->tv_content_values_table)
+                ->fields(['contentid', 'value'])
+                ->where('tmplvarid', $id)
+                ->execute();
+            $item['content_values'] = $items;
         }
 
         return $item;
@@ -95,83 +97,80 @@ class DatabaseDriver implements IDriver {
             ->execute();
 
         if ($type === ResourceType::TV) {
-          $result = [];
+            $result = [];
 
-          foreach ($items as $key => $item) {
-            $item = (array) $item;
-            $t_items = $this->connection->selectQuery()
-                ->table($this->tv_templates_table)
-                ->fields(['templateid'])
-                ->where('tmplvarid', $item['id'])
-                ->execute();
-            $t_values = [];
-            foreach ($t_items->asArray() as $t_item) {
-              $t_values[] = $t_item->templateid;
+            foreach ($items as $key => $item) {
+                $item = (array)$item;
+                $t_items = $this->connection->selectQuery()
+                    ->table($this->tv_templates_table)
+                    ->fields(['templateid'])
+                    ->where('tmplvarid', $item['id'])
+                    ->execute();
+                $t_values = [];
+                foreach ($t_items->asArray() as $t_item) {
+                    $t_values[] = $t_item->templateid;
+                }
+                $item['templates'] = $t_values;
+                $c_items = $this->connection->selectQuery()
+                    ->table($this->tv_content_values_table)
+                    ->fields(['contentid', 'value'])
+                    ->where('tmplvarid', $item['id'])
+                    ->execute();
+                $c_values = [];
+                foreach ($c_items->asArray() as $c_item) {
+                    $c_values[$c_item->contentid] = StringUtil::specialEscape($c_item->value);
+                }
+                $item['content_values'] = $c_values;
+                $result[$key] = (object)$item;
             }
-            $item['templates'] = $t_values;
-            $c_items = $this->connection->selectQuery()
-                ->table($this->tv_content_values_table)
-                ->fields(['contentid', 'value'])
-                ->where('tmplvarid', $item['id'])
-                ->execute();
-            $c_values = [];
-            foreach ($c_items->asArray() as $c_item) {
-              $c_values[$c_item->contentid] = StringUtil::specialEscape($c_item->value);
-            }
-            $item['content_values'] = $c_values;
-            $result[$key] = (object)$item;
-          }
-          $items = $result;
+            $items = $result;
         }
         return $items;
     }
 
     public function insert(IResource $resource)
     {
-        try {
-           if (ResourceType::TV === $resource->getType()) {
+        if (ResourceType::TV === $resource->getType()) {
 
-                $tv_data = $resource->getRawData();
-                unset($tv_data['content_values'], $tv_data['templates']);
+            $tv_data = $resource->getRawData();
+            unset($tv_data['content_values'], $tv_data['templates']);
+            $this->connection->insertQuery()
+                ->table($this->table_map[$resource->getType()])
+                ->data($tv_data)
+                ->execute();
+
+            $templates = [];
+            foreach ($resource->getTemplates() as $templateid) {
+                $templates[] = [$templateid, $resource->getId()];
+            }
+            if (count($templates)) {
                 $this->connection->insertQuery()
-                  ->table($this->table_map[$resource->getType()])
-                  ->data($tv_data)
-                  ->execute();
-
-               $templates = [];
-               foreach ($resource->getTemplates() as $templateid) {
-                 $templates[] = [$templateid, $resource->getId()];
-               }
-               if (count($templates)) {
-                 $this->connection->insertQuery()
-                   ->table($this->tv_templates_table)
-                   ->batchData(
-                      ['templateid', 'tmplvarid'],
-                      $templates
-                   )
-                   ->execute();
-               }
-               $content_values = [];
-               foreach ($resource->getContentValues() as $contentid => $value) {
-                 $content_values[] = [$contentid, $resource->getId(), $value];
-               }
-               if (count($content_values)) {
-                 $this->connection->insertQuery()
-                   ->table($this->tv_content_values_table)
-                   ->batchData(
-                      ['contentid', 'tmplvarid', 'value'],
-                      $content_values
-                   )
-                   ->execute();
-               }
-           } else {
-              $this->connection->insertQuery()
-                 ->table($this->table_map[$resource->getType()])
-                 ->data($resource->getRawData())
-                 ->execute();
-           }
-        } catch (\Exception $ex) {
-          die(dump($resource, $ex->getMessage()));
+                    ->table($this->tv_templates_table)
+                    ->batchData(
+                        ['templateid', 'tmplvarid'],
+                        $templates
+                    )
+                    ->execute();
+            }
+            $content_values = [];
+            foreach ($resource->getContentValues() as $contentid => $value) {
+                $content_values[] = [$contentid, $resource->getId(), $value];
+            }
+            if (count($content_values)) {
+                $this->connection->insertQuery()
+                    ->table($this->tv_content_values_table)
+                    ->batchData(
+                        ['contentid', 'tmplvarid', 'value'],
+                        $content_values
+                    )
+                    ->execute();
+            }
+        } else {
+            $this->checkExists($resource);
+            $this->connection->insertQuery()
+                ->table($this->table_map[$resource->getType()])
+                ->data($resource->getRawData())
+                ->execute();
         }
     }
 
@@ -199,15 +198,15 @@ class DatabaseDriver implements IDriver {
     public function truncate($type)
     {
         $this->connection->deleteQuery()
-          ->table($this->table_map[$type])
-          ->execute();
+            ->table($this->table_map[$type])
+            ->execute();
         if (ResourceType::TV === $type) {
             $this->connection->deleteQuery()
-              ->table($this->tv_templates_table)
-              ->execute();
+                ->table($this->tv_templates_table)
+                ->execute();
             $this->connection->deleteQuery()
-              ->table($this->tv_content_values_table)
-              ->execute();
+                ->table($this->tv_content_values_table)
+                ->execute();
         }
     }
 
@@ -225,7 +224,7 @@ class DatabaseDriver implements IDriver {
     public function isLocked()
     {
         $locks = $this->getLocks();
-        return (0 < count($locks)); 
+        return (0 < count($locks));
     }
 
     public function getLockedResourceName($action, $id)
@@ -250,16 +249,16 @@ class DatabaseDriver implements IDriver {
     {
         $locks = $this->connection->selectQuery()
             ->table('modx_active_users')
-            ->and('action', $this->resource_types_reversed[ResourceType::CHUNK]) // htmlsnippets
-            ->or('action', $this->resource_types_reversed[ResourceType::CONTENT]) // content
-            ->or('action', $this->resource_types_reversed[ResourceType::TEMPLATE]) // templates
-            ->or('action', $this->resource_types_reversed[ResourceType::SNIPPET]) // snippets
-            ->or('action', $this->resource_types_reversed[ResourceType::TV]) // tmplvars
+            ->and('action', $this->resource_types_reversed[ResourceType::CHUNK])// htmlsnippets
+            ->or('action', $this->resource_types_reversed[ResourceType::CONTENT])// content
+            ->or('action', $this->resource_types_reversed[ResourceType::TEMPLATE])// templates
+            ->or('action', $this->resource_types_reversed[ResourceType::SNIPPET])// snippets
+            ->or('action', $this->resource_types_reversed[ResourceType::TV])// tmplvars
             ->execute()
             ->asArray();
         $l = [];
         foreach ($locks as $lock) {
-                $l[] = ($this->getLockedResourceName($lock->action, $lock->id));
+            $l[] = ($this->getLockedResourceName($lock->action, $lock->id));
         }
         return $l;
     }
@@ -270,5 +269,14 @@ class DatabaseDriver implements IDriver {
             ->table('modx_active_users')
             ->where('internalKey', '>', 0)
             ->execute();
+    }
+
+    private function checkExists(IResource $resource)
+    {
+        $exists = $this->connection->countQuery()
+            ->table($this->table_map[$resource->getType()])
+            ->where('id', $resource->getId())
+            ->execute();
+        if ($exists > 0) throw new ModvertDuplicateException();
     }
 }

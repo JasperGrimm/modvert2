@@ -10,6 +10,8 @@ namespace Modvert;
 
 use Modvert\Driver\DatabaseDriver;
 use Modvert\Driver\RemoteDriver;
+use Modvert\Exceptions\ModvertDuplicateException;
+use Modvert\Exceptions\ModvertResourceException;
 use Modvert\Filesystem\FilesystemFactory;
 use Modvert\Filesystem\ResourceWriter;
 use Modvert\Resource\IResource;
@@ -153,18 +155,45 @@ class Storage implements IStorage
         $driver = new DatabaseDriver($this->getDatabaseConnection());
         $repository->setDriver($driver);
         $repository->truncateAll();
-        return;
-        foreach (ResourceType::asArray() as $type) {
-          $reader = FilesystemFactory::getReader($type);
-          $resources = $reader->read();
-          foreach ($resources as $resource) {
-            $repository->add($resource);
-          }
-            // $resources = $repository->getAll($type);
-            // $writer = FilesystemFactory::getWriter($type);
-            // foreach ($resources as $resource) {
-            //     $writer->write($resource);
-            // }
+        try {
+            foreach (ResourceType::asArray() as $type) {
+                $reader = FilesystemFactory::getReader($type);
+                $resources = $reader->read();
+
+                $progressBar = new \ProgressBar\Manager(0, count($resources) + 1, 70);
+                $progressBar->setFormat('Build %current%/%max% [%bar%] %percent%% %resource_type%: %resource_name%');
+                $progressBar->addReplacementRule('%resource_type%', 600, function ($buffer, $registry) use ($type){
+                    $max = 10;
+                    $c = strlen($type);
+                    if ($max > $c) {
+                        $type = $type . implode('', array_fill(0, $max-$c, ' '));
+                    }
+                    return $type;
+                });
+                $progressBar->addReplacementRule('%resource_name%', 500, function ($buffer, $registry) {
+                    return implode('', array_fill(0, 40, ' '));
+                });
+
+                foreach ($resources as $i=>$resource) {
+
+                    $progressBar->update($i);
+                    $progressBar->addReplacementRule('%resource_name%', 500, function ($buffer, $registry) use ($resource){
+                        $name = $resource->getName();
+                        $max = 45;
+                        $c = strlen($name);
+                        if ($max > $c) {
+                            $name = $name . implode('', array_fill(0, $max-$c, ' '));
+                        }
+                        return $name;
+                    });
+
+                    $repository->add($resource);
+                }
+
+                echo PHP_EOL;
+            }
+        } catch(\Exception $ex) {
+            throw new ModvertDuplicateException();
         }
     }
 }

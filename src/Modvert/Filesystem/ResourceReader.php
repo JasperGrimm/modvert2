@@ -37,6 +37,9 @@ class ResourceReader implements IResourceReader
         $this->path = TARGET_PATH . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . $type;
     }
 
+    /**
+     * @return array
+     */
     public function read()
     {
         $resources = [];

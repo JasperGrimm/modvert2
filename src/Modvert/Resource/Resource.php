@@ -1,5 +1,6 @@
 <?php namespace Modvert\Resource;
 use Modvert\StringUtil;
+use ModvertResourceException;
 
 abstract class Resource implements IResource {
 
@@ -109,7 +110,15 @@ abstract class Resource implements IResource {
 
 	public function setData($data)
 	{
-		$this->data = (array)$data;
+		if ($data instanceof \Modvert\Resource\IResource ) {
+			$data = $data->getData();
+		} else {
+			$data = (array) $data;
+		}
+		$this->data = $data;
+		if (!isset($this->data['id'])) {
+			throw new \Modvert\Exceptions\ModvertResourceException(var_export($this->data, 1));
+		}
 		$this->id = $this->data['id'];
 		$this->setName($this->data);
 	}

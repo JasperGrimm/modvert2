@@ -8,6 +8,7 @@
 
 namespace Modvert;
 
+use Modvert\Exceptions\ModvertDuplicateException;
 use Modvert\Resource\IResource;
 use Noodlehaus\Config;
 use PHPGit\Git;
@@ -86,7 +87,11 @@ class Application extends Singleton implements IModvert
         $this->output->writeln(sprintf('<info>[stage=%s]</info>', $stage));
         $this->config() && $this->stage = $stage;
         $storage = new Storage($this->getConnection());
-        $storage->buildFromFiles();
+        try {
+            $storage->buildFromFiles();
+        } catch (ModvertDuplicateException $ex) {
+            $this->output->writeln('<error>' . $ex->getMessage() . '</error>');
+        }
     }
 
     /**

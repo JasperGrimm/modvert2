@@ -15,10 +15,20 @@ use Modvert\Resource\IResource;
 
 class Repository implements IRepository
 {
+
     /**
      * @var IDriver
      */
     protected $driver;
+
+    /**
+     * Repository constructor.
+     * @param IDriver $driver
+     */
+    public function __construct(IDriver $driver=null)
+    {
+        $this->driver = $driver;
+    }
 
     public function setDriver(IDriver $driver)
     {
