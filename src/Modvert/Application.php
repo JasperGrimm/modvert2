@@ -148,7 +148,8 @@ class Application extends Singleton implements IModvert
         if (count($storage_changes)) {
           $this->output->writeln('<info>You have unstaged remote changes! Commit them and merge with main branch!</info>');
         } else {
-          $git->checkout($current_branch);
+          //$git->checkout($current_branch);
+            $this->output->writeln('<info>You dont have any unstaged changes! Please checkout to the ' . $current_branch . '!</info>');
         }
     }
 
