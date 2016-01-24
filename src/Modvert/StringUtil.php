@@ -13,7 +13,7 @@ class StringUtil {
 		$s = str_replace("\r\n", "\n", $s);
 		$s = str_replace("\r", "\n", $s);
 		// Don't allow out-of-control blank lines
-		$s = preg_replace("/\n{2,}/", "\n\n", $s);
+		$s = preg_replace("/\n{3,}/", "\n\n\n", $s);
 		return $s;
 	}
 
