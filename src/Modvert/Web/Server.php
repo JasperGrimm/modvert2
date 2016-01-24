@@ -2,6 +2,7 @@
 
 use Modvert\Application;
 use Modvert\Driver\DatabaseDriver;
+use Modvert\Exceptions\ModvertResourceException;
 use Modvert\Resource\Repository;
 use Modvert\Storage;
 use PHPixie\HTTP;
@@ -64,12 +65,22 @@ class Server
                 $this->response(['error' => 'Type must be specified!'], 500);
             $pk = (count($path_info) > 1) ? $path_info[1] : null;
             if (!$pk) {
-                $items = $repo->getAll($type);
-                $this->response(array_map(function($item){
-                    return $item->getData();
-                }, $items));
+                try {
+                    $items = $repo->getAll($type);
+                    $items = array_map(function($item){
+                        return $item->getData();
+                    }, $items);
+                } catch (ModvertResourceException $ex) {
+                    $items = [];
+                }
+                $this->response($items);
             } else {
-                $this->response($repo->getOnce($type, $pk)->getData());
+                try {
+                    $resource = $repo->getOnce($type, $pk)->getData();
+                } catch (ModvertResourceException $ex) {
+                    $resource = null;
+                }
+                $this->response($resource);
             }
         } elseif ('POST' === $request->method()) {
             $action = $request->data()->getData('action');
