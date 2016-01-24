@@ -122,7 +122,11 @@ class Application extends Singleton implements IModvert
         $git = new Git();
         $git->setRepository(Application::getInstance()->getAppPath());
         $status = $git->status();
-        $current_branch = $status['branch'];
+        $branches = $git->branch();
+        $current = array_filter(array_values($branches), function($branch) {
+           return $branch['current'] && !preg_match('/^origin\//', $branch['name']);
+        });
+        $current_branch = $current[0]['name'];
         // do not checkout if has unstaged changes
         if (count($status['changes'])) {
           if (!(
