@@ -22,7 +22,6 @@ class BuildCommand extends ModvertCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->app->build($input->getOption('stage'));
-        $output->writeln('<info>Complete!</info>');
     }
 
 }
