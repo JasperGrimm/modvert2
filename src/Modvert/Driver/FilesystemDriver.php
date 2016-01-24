@@ -9,6 +9,7 @@
 namespace Modvert\Driver;
 
 use Modvert\Filesystem\FilesystemFactory;
+use Modvert\Filesystem\Helper;
 use Modvert\Resource\IResource;
 
 class FilesystemDriver implements IDriver
@@ -50,7 +51,8 @@ class FilesystemDriver implements IDriver
 
     public function truncate($type)
     {
-        // TODO: Implement truncate() method.
+        $path = TARGET_PATH . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . $type;
+        Helper::delTree($path, ['.gitignore']);
     }
 
     /**

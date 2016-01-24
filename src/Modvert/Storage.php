@@ -9,6 +9,7 @@
 namespace Modvert;
 
 use Modvert\Driver\DatabaseDriver;
+use Modvert\Driver\FilesystemDriver;
 use Modvert\Driver\RemoteDriver;
 use Modvert\Exceptions\ModvertDuplicateException;
 use Modvert\Exceptions\ModvertResourceException;
@@ -19,6 +20,7 @@ use Modvert\Resource\Repository;
 use Modvert\Resource\ResourceType;
 use Modvert\Application;
 use PHPixie\Database\Connection;
+use ProgressBar\Manager;
 
 /**
  * Class Storage
@@ -30,6 +32,15 @@ class Storage implements IStorage
      * @var Connection $connection;
      */
     protected $connection;
+
+    private function truncate($type)
+    {
+        /**
+         * Remove old files
+         */
+        $fs_driver = new FilesystemDriver();
+        $fs_driver->truncate($type);
+    }
 
     /**
      * Storage constructor.
@@ -64,7 +75,7 @@ class Storage implements IStorage
             $writer = FilesystemFactory::getWriter($type);
 //            Application::getInstance()->getOutput()->writeln(sprintf('<question>count: %s; type:%s</question>', count($resources), $type));
 
-            $progressBar = new \ProgressBar\Manager(0, count($resources) + 1, 80);
+            $progressBar = new Manager(0, count($resources) + 1, 80);
             $progressBar->setFormat('Import remote %current%/%max% [%bar%] %percent%% %resource_type%: %resource_name%');
             $progressBar->addReplacementRule('%resource_type%', 600, function ($buffer, $registry) use ($type){
                 $max = 10;
@@ -77,6 +88,15 @@ class Storage implements IStorage
             $progressBar->addReplacementRule('%resource_name%', 500, function ($buffer, $registry) {
                 return implode('', array_fill(0, 40, ' '));
             });
+
+            /**
+             * Remove old files
+             */
+            $this->truncate($type);
+
+            /**
+             * Load resources from remote stage to the storage
+             */
             foreach ($resources as $i=>$resource) {
                 $progressBar->update($i);
                 $progressBar->addReplacementRule('%resource_name%', 500, function ($buffer, $registry) use ($resource){
@@ -108,7 +128,7 @@ class Storage implements IStorage
             $resources = $repository->getAll($type);
             if (!count($resources)) continue;
             $writer = FilesystemFactory::getWriter($type);
-            $progressBar = new \ProgressBar\Manager(0, count($resources) + 1, 70);
+            $progressBar = new Manager(0, count($resources) + 1, 70);
             $progressBar->setFormat('Import %current%/%max% [%bar%] %percent%% %resource_type%: %resource_name%');
             $progressBar->addReplacementRule('%resource_type%', 600, function ($buffer, $registry) use ($type){
                 $max = 10;
@@ -121,6 +141,10 @@ class Storage implements IStorage
             $progressBar->addReplacementRule('%resource_name%', 500, function ($buffer, $registry) {
                 return implode('', array_fill(0, 40, ' '));
             });
+            /**
+             * Remove old files
+             */
+            $this->truncate($type);
             foreach ($resources as $i=>$resource) {
                 $progressBar->update($i);
                 $progressBar->addReplacementRule('%resource_name%', 500, function ($buffer, $registry) use ($resource){
@@ -160,7 +184,7 @@ class Storage implements IStorage
                 $reader = FilesystemFactory::getReader($type);
                 $resources = $reader->read();
 
-                $progressBar = new \ProgressBar\Manager(0, count($resources) + 1, 70);
+                $progressBar = new Manager(0, count($resources) + 1, 70);
                 $progressBar->setFormat('Build %current%/%max% [%bar%] %percent%% %resource_type%: %resource_name%');
                 $progressBar->addReplacementRule('%resource_type%', 600, function ($buffer, $registry) use ($type){
                     $max = 10;
