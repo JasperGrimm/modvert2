@@ -64,7 +64,6 @@ class Application extends Singleton implements IModvert
         $this->output->writeln(sprintf('<info>[stage=%s]</info>', $stage));
         $this->config() && $this->stage = $stage;
         $storage = new Storage($this->getConnection());
-        //$storage->loadRemote($stage);
         $storage->loadLocal();
     }
 

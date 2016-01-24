@@ -104,6 +104,7 @@ class Storage implements IStorage
         $repository->setDriver($driver);
         foreach (ResourceType::asArray() as $type) {
             $resources = $repository->getAll($type);
+            if (!count($resources)) continue;
             $writer = FilesystemFactory::getWriter($type);
             $progressBar = new \ProgressBar\Manager(0, count($resources) + 1, 70);
             $progressBar->setFormat('Import %current%/%max% [%bar%] %percent%% %resource_type%: %resource_name%');
@@ -151,8 +152,9 @@ class Storage implements IStorage
         $repository = new Repository();
         $driver = new DatabaseDriver($this->getDatabaseConnection());
         $repository->setDriver($driver);
+        $repository->truncateAll();
+        return;
         foreach (ResourceType::asArray() as $type) {
-          $repository->truncate($type);
           $reader = FilesystemFactory::getReader($type);
           $resources = $reader->read();
           foreach ($resources as $resource) {

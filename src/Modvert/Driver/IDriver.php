@@ -26,4 +26,6 @@ interface IDriver {
 	public function isLocked();
 	public function getLocks();
 	public function unlock();
+
+	public function truncateAll();
 }

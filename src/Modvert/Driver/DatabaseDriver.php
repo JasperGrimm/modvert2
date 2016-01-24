@@ -189,6 +189,13 @@ class DatabaseDriver implements IDriver {
         // TODO: Implement remove() method.
     }
 
+    public function truncateAll()
+    {
+        foreach (ResourceType::asArray() as $type) {
+            $this->truncate($type);
+        }
+    }
+
     public function truncate($type)
     {
         $this->connection->deleteQuery()

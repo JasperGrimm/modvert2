@@ -117,4 +117,9 @@ class RemoteDriver implements IDriver
     {
         return $this->post(['action'=>'remove_locks']);
     }
+
+    public function truncateAll()
+    {
+        // TODO: Implement truncateAll() method.
+    }
 }

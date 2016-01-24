@@ -98,4 +98,9 @@ class Repository implements IRepository
     {
         return $this->driver->unlock();
     }
+
+    public function truncateAll()
+    {
+        return $this->driver->truncateAll();
+    }
 }
