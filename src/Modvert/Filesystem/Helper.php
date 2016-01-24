@@ -21,7 +21,7 @@ class Helper
                 }
             }
         } else {
-            if (!in_array($dir, $ignore)) {
+            if (!in_array($dir, $ignore) && file_exists($dir)) {
                 unlink($dir);
             }
         }
