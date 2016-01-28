@@ -233,6 +233,10 @@ class DatabaseDriver implements IDriver
         $type = $this->resource_types[$action];
         if (ResourceType::CONTENT === $type) {
             $fields = ['alias', 'id'];
+        } elseif (ResourceType::CATEGORY === $type) {
+            $fields = ['category', 'id'];
+        } elseif (ResourceType::TEMPLATE === $type) {
+            $fields = ['templatename', 'id'];
         }
         $r = $this->connection->selectQuery()
             ->table($this->table_map[$type])
