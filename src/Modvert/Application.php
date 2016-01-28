@@ -115,7 +115,7 @@ class Application extends Singleton implements IModvert
         $repository->setDriver($driver);
 
         if ($repository->isLocked()) { // If remote stage is Locked
-            return $this->output->writeln('<error>Remote stage is locked. Please try again!</error>');
+            return $this->output->writeln('<error>Remote stage is locked. Please try again! To show what is locked use `modvert get-locks --stage={your stage}`</error>');
         }
 
         $storage = new Storage($this->getConnection());
@@ -232,5 +232,16 @@ class Application extends Singleton implements IModvert
         $driver = new RemoteDriver($stage);
         $repository->setDriver($driver);
         return $repository->unlock();
+    }
+
+    public function getLocks($stage, $local=false)
+    {
+        if($local) {
+            $driver = new DatabaseDriver($this->getConnection());
+        } else {
+            $driver = new RemoteDriver($stage);
+        }
+        $repository = new Repository($driver);
+        return $repository->getLocks();
     }
 }
