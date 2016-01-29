@@ -88,9 +88,14 @@ class FilesystemDriver implements IDriver
 
     public function clearCache()
     {
-        $cache_files = ["assets/cache/*.pageCache.php", "assets/cache/siteCache.idx.php", "assets/cache/sitePublishing.idx.php"];
+        $cache_files_mask = ["/\.pageCache\.php/", "/^siteCache\.idx\.php/", "/sitePublishing\.idx\.php/"];
+        $cache_files = scandir(TARGET_PATH . '/assets/cache');
         foreach ($cache_files as $file) {
-            @unlink(TARGET_PATH . "/" . $file);
+            foreach ($cache_files_mask as $mask) {
+                if (preg_match($mask, $file)) {
+                    @unlink(TARGET_PATH . "/assets/cache/" . $file);     
+                }
+            }
         }
         return true;
     }
