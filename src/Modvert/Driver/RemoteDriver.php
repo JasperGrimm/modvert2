@@ -122,4 +122,9 @@ class RemoteDriver implements IDriver
     {
         // TODO: Implement truncateAll() method.
     }
+
+    public function clearCache() 
+    {
+        return $this->post(['action'=>'clear_cache']);
+    }
 }

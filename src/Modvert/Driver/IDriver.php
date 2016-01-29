@@ -28,4 +28,6 @@ interface IDriver {
 	public function unlock();
 
 	public function truncateAll();
+
+	public function clearCache();
 }

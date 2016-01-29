@@ -85,4 +85,14 @@ class FilesystemDriver implements IDriver
     {
         // TODO: Implement truncateAll() method.
     }
+
+    public function clearCache()
+    {
+        $cache_files = ["assets/cache/*.pageCache.php", "assets/cache/siteCache.idx.php", "assets/cache/sitePublishing.idx.php"];
+        foreach ($cache_files as $file) {
+            $output->writeln('<question>unlink ' . TARGET_PATH . "/" . $file . '</question>');          
+            @unlink(TARGET_PATH . "/" . $file);
+        }
+        return true;
+    }
 }

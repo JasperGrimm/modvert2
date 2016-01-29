@@ -283,4 +283,9 @@ class DatabaseDriver implements IDriver
             ->execute();
         if ($exists > 0) throw new ModvertDuplicateException();
     }
+
+    public function clearCache()
+    {
+        
+    }
 }

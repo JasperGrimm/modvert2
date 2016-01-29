@@ -244,4 +244,15 @@ class Application extends Singleton implements IModvert
         $repository = new Repository($driver);
         return $repository->getLocks();
     }
+
+    public function clearCache($stage, $local=false)
+    {
+        if($local) {
+            $driver = new FilesystemDriver();
+        } else {
+            $driver = new RemoteDriver($stage);
+        }
+        $repository = new Repository($driver);
+        return $repository->clearCache();
+    }
 }

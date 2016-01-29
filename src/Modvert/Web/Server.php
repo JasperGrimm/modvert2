@@ -87,6 +87,9 @@ class Server
             if ($action === 'remove_locks') {
                 $repo->unlock();
                 $this->response(['result' => 'ok'], 201);
+            } elseif ($action === 'clear_cache') {
+                $repo->clearCache();
+                $this->response(['result' => 'ok'], 201);
             } else {
                 $this->response(['error' => 'Unsupported operation!'], 500);
             }

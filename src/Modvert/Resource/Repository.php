@@ -113,4 +113,9 @@ class Repository implements IRepository
     {
         return $this->driver->truncateAll();
     }
+
+    public function clearCache()
+    {
+        return $this->driver->clearCache();
+    }
 }
