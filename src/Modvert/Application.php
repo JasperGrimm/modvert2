@@ -8,17 +8,18 @@
 
 namespace Modvert;
 
+use Modvert\Driver\DatabaseDriver;
+use Modvert\Driver\FilesystemDriver;
+use Modvert\Driver\RemoteDriver;
 use Modvert\Exceptions\ModvertDuplicateException;
 use Modvert\Resource\IResource;
+use Modvert\Resource\Repository;
+use Modvert\Web\Server;
 use Noodlehaus\Config;
 use PHPGit\Git;
 use PHPixie\Database\Connection;
-use Modvert\Web\Server;
-use \Modvert\Helper\ArrayHelper;
-use Modvert\Resource\Repository;
-use Modvert\Driver\RemoteDriver;
-use Modvert\Driver\DatabaseDriver;
 use Symfony\Component\Console\Output\OutputInterface;
+use \Modvert\Helper\ArrayHelper;
 
 class Application extends Singleton implements IModvert
 {
