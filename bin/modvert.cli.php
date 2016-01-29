@@ -24,4 +24,5 @@ $application->add(new \Modvert\Commands\DumpCommand());
 $application->add(new \Modvert\Commands\LoadRemoteCommand());
 $application->add(new \Modvert\Commands\UnlockCommand());
 $application->add(new \Modvert\Commands\GetLocksCommand());
+$application->add(new \Modvert\Commands\ClearCacheCommand());
 $application->run();
