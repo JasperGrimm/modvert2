@@ -2,6 +2,7 @@
 
 use Modvert\Application;
 use Modvert\Driver\DatabaseDriver;
+use Modvert\Driver\FilesystemDriver;
 use Modvert\Exceptions\ModvertResourceException;
 use Modvert\Resource\Repository;
 use Modvert\Storage;
@@ -88,6 +89,7 @@ class Server
                 $repo->unlock();
                 $this->response(['result' => 'ok'], 201);
             } elseif ($action === 'clear_cache') {
+                $repo->setDriver(new FilesystemDriver());
                 $repo->clearCache();
                 $this->response(['result' => 'ok'], 201);
             } else {
