@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="{{ site.description }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ site.title }}</title>
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="javascripts/respond.js"></script>
+  <link rel="canonical" href="{{ site.ull }}" />
+</head>
+<body>
+
+    <div id="header">
+      <div class="wrapper">
+        <a href="https://github.com/JasperGrimm/modvert2/tree/develop" class="btn">View On GitHub</a>
+        <ul class="nav">
+          <li class="download-title">Downloads</li>
+          <li class="downloads"><a href="https://github.com/JasperGrimm/modvert2/zipball/develop" class="btn">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/JasperGrimm/modvert2/tarball/develop" class="btn">TAR</a></li>
+        </ul>
+      </div>
+    </div><!-- end header -->
+
+    <div class="wrapper">
+      <section>
+       <div class="container">
+        <h1><a href="./">{{ site.tag_text }}</a></h1>
+        {{ content }}
+        </div>
+      </section>>
+    </div>
+</body>
+</html>

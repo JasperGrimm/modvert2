@@ -1,0 +1,10 @@
+# Site settings
+title: Modvert2
+tag_text: MODx database migration
+description: Tool to synchronize MODx resources beetween 2 or more servers
+url: "http://127.0.0.1:4000"
+
+# Build settings
+markdown: kramdown
+
+exclude: ["README.md"]

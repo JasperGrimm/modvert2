@@ -1,34 +1,5 @@
-# Modvert2
-*Modx sync and versioning tool*
+This is as Jekyll theme built to make single page websites, articles, or literary masterpieces readable anywhere.
 
-[![Build
-Status](https://travis-ci.org/JasperGrimm/modvert2.svg?branch=develop)](https://travis-ci.org/JasperGrimm/modvert2)
+[Demo and Documentation](https://adueck.github.io/good-clean-read)
 
-
-# Установка
-```
-composer require vestnik/modvert2:dev-develop
-```
-# Использование
-##### Создать слепок
-```
-bin/modvert.cli.php dump
-```
-
-##### Построить из слепка
-```
-bin/modvert.cli.php build
-```
-
-##### Создание слепка из удаленного stage
-```
-bin/modvert.cli.php load-remote --stage=staging
-or
-bin/modvert.cli.php load-remote --stage=test
-```
-
-##### Ошибки
-Сообщение|Значение
---- | ---
-Remote stage is locked. Please try again!|Возникает при выполнении команды ```bin/modvert.cli.php load-remote``` На удаленном stage кто-то еще правит ресурс. Необходимо дождаться завершение редактирования, чтобы загрузить стабильную последнюю версию ресурса
-Local stage is locked. Please try again!|Возникает при выполнении команды ```bin/modvert.cli.php build``` На локальном сервере есть редактируемые ресурсы. Воизбежание потери наработок, убедитесь, что весь контент корректно загружен в файлы. Если вы не редактируете более никакие ресурсы в manager, удалите блокировки и повторите операцию.
+Built on top of <a href="http://chibicode.github.io/solo">Solo</a>, by [Shu Uesugi](https://github.com/chibicode)
