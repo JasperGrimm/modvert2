@@ -64,12 +64,12 @@ bin/modvert.cli.php build
 {% endhighlight %}
 
 ##### Создание слепка из удаленного stage
-Загрузка из <a href="http://staging.questoria.ru">http://staging.questoria.ru</a>
+Загрузка из <a href="http://staging.example.com">http://staging.example.com</a>
 {% highlight bash %}
 bin/modvert.cli.php load-remote --stage=staging
 {% endhighlight %}
 
-Загрузка из <a href="http://test.questoria.ru">http://test.questoria.ru</a>
+Загрузка из <a href="http://test.example.com">http://test.example.com</a>
 {% highlight bash %}
 bin/modvert.cli.php load-remote --stage=test
 {% endhighlight %}
