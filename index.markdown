@@ -51,7 +51,7 @@ stages:
 {% endhighlight %}
 #### Использование
 
-<b>Примеры работы с реальным сайтом можно посмотреть <a href="tutorial.html">здесь</a></b>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/wcWMQHCiMTQ" frameborder="0" allowfullscreen></iframe>
 
 ##### Слить локальную БД в файлы
 {% highlight bash %}
