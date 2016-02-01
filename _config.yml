@@ -1,6 +1,6 @@
 # Site settings
 title: modvert2
-tag_text: MODx database migration
+tag_text: MODx database migration tool
 description: Tool to synchronize MODx resources beetween 2 or more servers
 url: "http://127.0.0.1:4000"
 
