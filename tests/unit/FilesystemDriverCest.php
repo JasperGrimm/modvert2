@@ -14,7 +14,7 @@ class FilesystemDriverCest
     // tests
     public function tryToTest(UnitTester $I)
     {
-        $driver = new \Modvert\Driver\FilesystemDriver();
-        $driver->truncate(\Modvert\Resource\ResourceType::CATEGORY);
+        //$driver = new \Modvert\Driver\FilesystemDriver();
+        //$driver->truncate(\Modvert\Resource\ResourceType::CATEGORY);
     }
 }

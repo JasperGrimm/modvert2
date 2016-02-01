@@ -20,14 +20,14 @@ class DatabaseDriverCest
     public function tryToTest(UnitTester $I)
     {
         $driver = new DatabaseDriver($I->getConnection());
-        dump($driver->truncate(ResourceType::CHUNK));
+        //dump($driver->truncate(ResourceType::CHUNK));
     }
 
     public function tryToGetLocks(UnitTester $I)
     {
         $driver = new DatabaseDriver($I->getConnection());
         $locks = $driver->getLocks();
-        dump($locks);
+        //dump($locks);
     }
 
     public function tryToUnlock(UnitTester $I)
