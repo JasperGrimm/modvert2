@@ -51,7 +51,11 @@ stages:
 {% endhighlight %}
 #### Использование
 
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/wcWMQHCiMTQ" frameborder="0" allowfullscreen></iframe>
+
+###### Пример работы с фич-ветками.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/cd-owDfxkqo" frameborder="0" allowfullscreen></iframe>
 
 ##### Слить локальную БД в файлы
 {% highlight bash %}
