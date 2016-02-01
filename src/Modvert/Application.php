@@ -139,8 +139,8 @@ class Application extends Singleton implements IModvert
           }
         }
 
-        $temp_branch = 'modvert/develop';
-        $parent_branch = 'origin/develop';
+        $temp_branch = 'modvert/' . $current_branch;
+        $parent_branch = 'origin/' . $current_branch;
         try {
             $git->branch->delete($temp_branch, ['force'=>true]);
         } catch(\Exception $ex) { /** the branch not found */ }
