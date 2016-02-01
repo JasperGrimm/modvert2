@@ -10,6 +10,12 @@ Status](https://travis-ci.org/JasperGrimm/modvert2.svg?branch=develop)](https://
 composer require vestnik/modvert2:dev-develop
 ```
 # Использование
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/wcWMQHCiMTQ" frameborder="0" allowfullscreen></iframe>
+
+###### Пример работы с фич-ветками.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/cd-owDfxkqo" frameborder="0" allowfullscreen></iframe>
+
 ##### Создать слепок
 ```
 bin/modvert.cli.php dump
