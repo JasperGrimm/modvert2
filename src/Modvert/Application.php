@@ -127,7 +127,8 @@ class Application extends Singleton implements IModvert
         $current = array_filter(array_values($branches), function($branch) {
            return $branch['current'] && !preg_match('/^origin\//', $branch['name']);
         });
-        $current_branch = $current[0]['name'];
+        $current = end($current);
+        $current_branch = $current['name'];
         // do not checkout if has unstaged changes
         if (count($status['changes'])) {
           if (!(
