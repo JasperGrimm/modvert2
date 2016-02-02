@@ -227,7 +227,7 @@ class DatabaseDriver implements IDriver
         return (0 < count($locks));
     }
 
-    public function getLockedResourceName($action, $id)
+    public function getLockedResourceName($action, $id, $actor=null)
     {
         $fields = ['name', 'id'];
         $type = $this->resource_types[$action];
@@ -243,7 +243,7 @@ class DatabaseDriver implements IDriver
             ->fields($fields)
             ->where('id', $id)
             ->execute();
-        return $type . ': ' . $r->get('id') . ' - ' . $r->get();
+        return $type . ': ' . $r->get('id') . ' - ' . $r->get() . ($actor? (' @' . $actor) : '');
     }
 
     /**
@@ -262,7 +262,7 @@ class DatabaseDriver implements IDriver
             ->asArray();
         $l = [];
         foreach ($locks as $lock) {
-            $l[] = ($this->getLockedResourceName($lock->action, $lock->id));
+            $l[] = ($this->getLockedResourceName($lock->action, $lock->id, $lock->username));
         }
         return $l;
     }
