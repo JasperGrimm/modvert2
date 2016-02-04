@@ -15,6 +15,7 @@ $app = \Modvert\Application::getInstance();
 $app->setAppPath(TARGET_PATH);
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 $application = new Application();
 $application->add(new \Modvert\Commands\FixDuplicates());
@@ -25,4 +26,9 @@ $application->add(new \Modvert\Commands\LoadRemoteCommand());
 $application->add(new \Modvert\Commands\UnlockCommand());
 $application->add(new \Modvert\Commands\GetLocksCommand());
 $application->add(new \Modvert\Commands\ClearCacheCommand());
-$application->run();
+try{
+    $application->run();
+} catch(\Exception $ex) {
+  $output = new ConsoleOutput();
+  $output->writeln('<error>' . $ex->getMessage() . '</error>');
+}

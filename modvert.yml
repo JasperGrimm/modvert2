@@ -19,7 +19,9 @@ default_stage: 'test'
 stages:
     staging:
         remote_url: 'http://staging.questoria.ru/vendor/vestnik/modvert2/bin/modvert.web.php'
+        git_branch: 'develop'
     test:
         remote_url: 'http://test.questoria.ru/vendor/vestnik/modvert2/bin/modvert.web.php'
+        git_branch: 'test'
     development:
         remote_url: 'http://modvert.loc/vendor/vestnik/modvert2/bin/modvert.web.php'

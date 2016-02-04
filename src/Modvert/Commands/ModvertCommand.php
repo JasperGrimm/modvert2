@@ -65,7 +65,7 @@ class ModvertCommand extends Command
                 's',
                 InputOption::VALUE_OPTIONAL,
                 'Remote stage',
-                $this->app->config()->get('default_stage')
+                null
             )
         ;
     }
