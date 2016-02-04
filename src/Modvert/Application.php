@@ -137,7 +137,7 @@ class Application extends Singleton implements IModvert
           throw new \Exception('You can not execute a "load-remote" command here. Please switch to the branch that specified for stage "' . $stage . '"');
         }
         $this->output->writeln('<question>Loading from '  . $stage . '...</question>');
-die($stage);
+// die($stage);
         /** @var $resource IResource **/
         $repository = new Repository();
         $driver = new RemoteDriver($stage);
