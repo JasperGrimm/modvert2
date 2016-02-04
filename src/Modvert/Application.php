@@ -132,6 +132,10 @@ class Application extends Singleton implements IModvert
             throw new \Exception('--stage=<stage> do not specified! Please specify stage by --stage or configure "git_branch" parameter in the modvert.yml');
           }
         }
+        $stage_config = $this->config()->get('stages.' . $stage);
+        if (isset($stage_config['git_branch']) && $stage_config['git_branch'] !== $current_branch) { // защита от загрузки в опасных ветках
+          throw new \Exception('You can not execute a "load-remote" command here. Please switch to the branch that specified for stage "' . $stage . '"');
+        }
         $this->output->writeln('<question>Loading from '  . $stage . '...</question>');
 die($stage);
         /** @var $resource IResource **/
@@ -139,17 +143,11 @@ die($stage);
         $driver = new RemoteDriver($stage);
         $repository->setDriver($driver);
 
-        $stage_config = $this->config()->get('stages.' . $stage);
-
         if ($repository->isLocked()) { // If remote stage is Locked
             return $this->output->writeln('<error>Remote stage is locked. Please try again! To show what is locked use `modvert get-locks --stage={your stage}`</error>');
         }
 
         $storage = new Storage($this->getConnection());
-
-        if (isset($stage_config['git_branch']) && $stage_config['git_branch'] !== $current_branch) { // защита от загрузки в опасных ветках
-          throw new \Exception('You can not execute a "load-remote" command here. Please switch to the branch that specified for stage "' . $stage . '"');
-        }
         // do not checkout if has unstaged changes
         if (count($status['changes'])) {
           if (!(
