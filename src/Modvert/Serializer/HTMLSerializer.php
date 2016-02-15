@@ -48,6 +48,7 @@ empty;
             }
         }
         $docblock = preg_replace('/\/\*\*(.*)\*\//s', '${1}', $docblock);
+        $docblock = preg_replace('/^ *\*+/sm', '', $docblock);
         $data = eval($docblock);
         $data['content'] = $content;
         return $data;

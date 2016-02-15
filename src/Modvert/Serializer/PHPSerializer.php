@@ -35,11 +35,11 @@ class PHPSerializer extends Serializer
     {
         $source = file_get_contents($path);
         $tokens = token_get_all($source);
-        $doc_block = $content = '';
+        $docblock = $content = '';
         foreach ($tokens as $token) {
             if (T_DOC_COMMENT == $token[0]) {
-                $doc_block = $token[1];
-                $content = str_replace($doc_block, '', $source);
+                $docblock = $token[1];
+                $content = str_replace($docblock, '', $source);
                 $content = preg_replace("/\\r\\n/", "\n", $content);
                 $content = preg_replace('/\<\?php[\r\n]?(.*)/sm', '${1}', $content);
                 $content = preg_replace('/^\s+$/s', "\n", $content);
@@ -47,8 +47,9 @@ class PHPSerializer extends Serializer
                 break;
             }
         }
-        $doc_block = preg_replace('/\/\*\*(.*)\*\//s', '${1}', $doc_block);
-        $data = eval($doc_block);
+        $docblock = preg_replace('/\/\*\*(.*)\*\//s', '${1}', $docblock);
+        $docblock = preg_replace('/^ *\*+/sm', '', $docblock);
+        $data = eval($docblock);
         if ($content) {
             if ($content[0] == "\n" || $content[0] == "\r\n") {
                 $content = preg_replace("/^\n/", "", $content, 1);
