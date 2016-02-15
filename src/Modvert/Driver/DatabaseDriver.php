@@ -176,7 +176,13 @@ class DatabaseDriver implements IDriver
 
     public function update(IResource $resource)
     {
-        // TODO: Implement update() method.
+        try {
+            $this->checkExists($resource);
+        } catch(\Exception $ex) {
+            $this->remove($resource->getType(), $resource->getId());
+            sleep(1);
+        }
+        $this->insert($resource);
     }
 
     /**
@@ -185,7 +191,10 @@ class DatabaseDriver implements IDriver
      */
     public function remove($type, $id)
     {
-        // TODO: Implement remove() method.
+        $this->connection->deleteQuery()
+            ->table($this->table_map[$type])
+            ->where('id', $id)
+            ->execute();
     }
 
     public function truncateAll()

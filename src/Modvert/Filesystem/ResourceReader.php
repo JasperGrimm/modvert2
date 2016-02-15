@@ -54,4 +54,17 @@ class ResourceReader implements IResourceReader
         }
         return $resources;
     }
+
+    /**
+     * @param $file
+     * @return \Modvert\Resource\Modx\Category|\Modvert\Resource\Modx\Content|\Modvert\Resource\Modx\Template|\Modvert\Resource\Modx\TV
+     * @throws \Modvert\Exceptions\ModvertResourceException
+     */
+    public function readOnce($file)
+    {
+        $resource_data = $this->serializer->deserialize($file);
+        $resource = ResourceFactory::get($this->type);
+        $resource->setData($resource_data);
+        return $resource;
+    }
 }

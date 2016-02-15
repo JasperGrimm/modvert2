@@ -24,4 +24,13 @@ class ResourceType {
 	{
 			return in_array($type, self::asArray());
 	}
+
+	public static function fromPath($path) {
+		$path = str_replace('\\', '/', $path);
+		preg_match('/storage\/(' . implode('|', self::asArray()) . ')\//', $path, $matches);
+		if (count($matches)>1) {
+			return $matches[1];
+		}
+		return null;
+	}
 }
