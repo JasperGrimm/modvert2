@@ -29,7 +29,7 @@ class WatchCommand extends ModvertCommand
     public function configure()
     {
         parent::configure();
-        $this->addArgument('filename', InputArgument::REQUIRED);
+        $this->addArgument('filename', InputArgument::OPTIONAL);
     }
 
     protected function updateResource($filename) {
@@ -48,9 +48,15 @@ class WatchCommand extends ModvertCommand
         $files = new \Illuminate\Filesystem\Filesystem;
         $tracker = new \JasonLewis\ResourceWatcher\Tracker;
         $watcher = new \JasonLewis\ResourceWatcher\Watcher($tracker, $files);
-        $listener = $watcher->watch(Application::getInstance()->getAppPath() . DIRECTORY_SEPARATOR . $input->getArgument('filename'));
-        $listener->modify(function($resource, $path) {
-            echo "{$path} has been modified.".PHP_EOL;
+        $watch_path =  Application::getInstance()->getAppPath() . DIRECTORY_SEPARATOR;
+        if ($input->getArgument('filename')) {
+            $watch_path .= $input->getArgument('filename');
+        } else {
+            $watch_path .= 'storage'; // watch whole storage
+        }
+        $listener = $watcher->watch($watch_path);
+        $listener->modify(function($resource, $path) use ($output){
+            $output->writeln("{$path} has been modified.");
             $this->updateResource($path);
         });
         $watcher->start();
