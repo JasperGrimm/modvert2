@@ -35,7 +35,6 @@ class Content extends Resource
             'pub_date',
             'unpub_date',
             'introtext',
-            'richtext',
             'createdby',
             'createdon',
             'editedby',
