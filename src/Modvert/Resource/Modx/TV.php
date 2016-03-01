@@ -20,7 +20,7 @@ class TV extends Resource
     {
         $data = $this->data;
         $data['default_text'] = addslashes($data['default_text']);
-        $data['elements'] = addslashes($data['elements']);
+        $data['elements'] = $data['elements'];
         return $data;
     }
 
