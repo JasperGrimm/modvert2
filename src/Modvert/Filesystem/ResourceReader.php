@@ -43,6 +43,7 @@ class ResourceReader implements IResourceReader
     public function read()
     {
         $resources = [];
+        if (!file_exists($this->path)) return $resources;
         $files = scandir($this->path);
         foreach ($files as $file) {
           if (!in_array($file, ['.', '..'])) {

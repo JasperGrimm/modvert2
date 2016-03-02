@@ -27,6 +27,7 @@ $application->add(new \Modvert\Commands\UnlockCommand());
 $application->add(new \Modvert\Commands\GetLocksCommand());
 $application->add(new \Modvert\Commands\ClearCacheCommand());
 $application->add(new \Modvert\Commands\WatchCommand());
+$application->add(new \Modvert\Commands\NextIdCommand());
 try{
     $application->run();
 } catch(\Exception $ex) {
